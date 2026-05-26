@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>RouteApp — Modernization Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ====================== APP SHELL ====================== -->
+<div class="stage">
+
+  <!-- Theme & device controls (outside the phone) -->
+  <header class="control-bar">
+    <div class="brand">
+      <div class="brand-mark">RA</div>
+      <div class="brand-meta">
+        <strong>RouteApp</strong>
+        <span>Modernization prototype · v0.1</span>
+      </div>
+    </div>
+    <div class="controls">
+      <div class="control-group" role="group" aria-label="Theme">
+        <button class="ctrl-btn" data-theme="light" aria-label="Light mode">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+          Light
+        </button>
+        <button class="ctrl-btn" data-theme="dark" aria-label="Dark mode">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          Dark
+        </button>
+        <button class="ctrl-btn active" data-theme="auto" aria-label="Auto">
+          Auto
+        </button>
+      </div>
+      <div class="control-group" role="group" aria-label="Demo">
+        <button class="ctrl-btn" id="glove-mode" aria-pressed="false" title="Simulates outdoor sun glare for legibility check">
+          ☀ Sun glare test
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="device-wrap">
+
+    <!-- =================== PHONE FRAME =================== -->
+    <div class="phone" id="phone">
+      <div class="phone-notch"></div>
+
+      <!-- Status bar -->
+      <div class="status-bar">
+        <span class="time">9:41</span>
+        <div class="status-icons">
+          <svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor"><rect x="0" y="6" width="3" height="5" rx="1"/><rect x="4.5" y="4" width="3" height="7" rx="1"/><rect x="9" y="2" width="3" height="9" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1"/></svg>
+          <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor"><path d="M8 2.5c2 0 3.9.7 5.4 2 .3.3.8.3 1.1 0l.9-.9c.3-.3.3-.8 0-1.1-2-1.7-4.6-2.7-7.4-2.7S2.6.8.6 2.5c-.3.3-.3.8 0 1.1l.9.9c.3.3.8.3 1.1 0C4.1 3.2 6 2.5 8 2.5zM8 6.5c1 0 1.9.4 2.6 1 .3.3.8.3 1.1 0l.9-.9c.3-.3.3-.8 0-1.1-1.2-1.1-2.9-1.8-4.6-1.8s-3.4.7-4.6 1.8c-.3.3-.3.8 0 1.1l.9.9c.3.3.8.3 1.1 0 .7-.6 1.6-1 2.6-1z"/></svg>
+          <span class="battery"><span class="battery-fill"></span></span>
+        </div>
+      </div>
+
+      <!-- ============== SCREENS ============== -->
+      <div class="screens">
+
+        <!-- ===== SCREEN: ROUTE LIST ===== -->
+        <section class="screen active" data-screen="routes">
+          <div class="app-header">
+            <div class="header-row">
+              <button class="header-icon" aria-label="Truck emergency" data-go="emergency">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 17h4V5H2v12h3"/><path d="M20 17h2v-3.34a4 4 0 0 0-1.17-2.83L19 9h-5"/><path d="M14 17h1"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
+                <span class="badge-dot"></span>
+              </button>
+              <button class="date-pill" data-sheet="datepicker" aria-label="Select date">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>
+                <span><strong>Thu</strong> 30 April</span>
+              </button>
+              <button class="header-icon" aria-label="Inbox" data-go="inbox">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
+                <span class="badge-count">2</span>
+              </button>
+            </div>
+
+            <div class="day-nav">
+              <button class="day-arrow" aria-label="Previous day">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+              </button>
+              <div class="day-label">
+                <span class="day-name">Thursday</span>
+                <span class="day-rel">Today</span>
+              </div>
+              <button class="day-arrow" aria-label="Next day">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="screen-body">
+            <button class="primary-action" data-go="create">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+              <span>Create new route</span>
+            </button>
+
+            <div class="section-label">
+              <span>Today's routes</span>
+              <button class="refresh-btn" id="refresh-btn" aria-label="Refresh">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>
+                Refresh
+              </button>
+            </div>
+
+            <ul class="route-list">
+              <li class="route-card">
+                <div class="route-icon" style="--accent: var(--green-500);">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg>
+                </div>
+                <div class="route-meta">
+                  <h3>Monday Route</h3>
+                  <div class="route-progress">
+                    <div class="progress-bar"><div class="progress-fill" style="width: 7.7%"></div></div>
+                    <span class="progress-label"><strong>1</strong> / 13 stops</span>
+                  </div>
+                </div>
+                <svg class="chev" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+              </li>
+
+              <li class="route-card">
+                <div class="route-icon" style="--accent: var(--amber-500);">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg>
+                </div>
+                <div class="route-meta">
+                  <h3>Tuesday Route</h3>
+                  <div class="route-progress">
+                    <div class="progress-bar"><div class="progress-fill" style="width: 0%"></div></div>
+                    <span class="progress-label"><strong>0</strong> / 21 stops</span>
+                  </div>
+                </div>
+                <svg class="chev" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+              </li>
+            </ul>
+
+            <p class="hint-text">Pull down to refresh</p>
+          </div>
+
+          <!-- Bottom tabs (shared) -->
+          <nav class="tab-bar"></nav>
+        </section>
+
+
+        <!-- ===== SCREEN: CREATE ROUTE ===== -->
+        <section class="screen" data-screen="create">
+          <div class="app-header">
+            <div class="header-row">
+              <button class="header-icon ghost" aria-label="Back" data-go="routes">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+              </button>
+              <h2 class="header-title">New route</h2>
+              <button class="text-action" id="save-btn">Save</button>
+            </div>
+          </div>
+
+          <div class="screen-body">
+            <div class="form-stack">
+              <label class="field">
+                <span class="field-label">Route name</span>
+                <div class="field-input">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
+                  <input type="text" placeholder="e.g. North Pickup Loop" id="route-name-input" />
+                </div>
+                <span class="field-hint">Short name to identify this route</span>
+              </label>
+
+              <label class="field">
+                <span class="field-label">Route date</span>
+                <button type="button" class="field-input as-button" data-sheet="datepicker">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>
+                  <span><strong>Thursday</strong>, 30 April 2026</span>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left:auto"><path d="M9 18l6-6-6-6"/></svg>
+                </button>
+              </label>
+            </div>
+
+            <button class="big-cta" id="big-save-btn">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>
+              Save route
+            </button>
+          </div>
+
+          <nav class="tab-bar"></nav>
+        </section>
+
+
+        <!-- ===== SCREEN: INBOX ===== -->
+        <section class="screen" data-screen="inbox">
+          <div class="app-header">
+            <div class="header-row">
+              <button class="header-icon ghost" aria-label="Back" data-go="routes">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+              </button>
+              <h2 class="header-title">Inbox</h2>
+              <div style="width:48px"></div>
+            </div>
+
+            <div class="legend-row">
+              <div class="legend-chip"><span class="ldot blue"></span>Unread</div>
+              <div class="legend-chip"><span class="ldot red"></span>Acknowledge</div>
+            </div>
+          </div>
+
+          <div class="screen-body">
+            <ul class="msg-list">
+              <li class="msg-card unread ack-required" data-go="message">
+                <div class="msg-avatar">AP</div>
+                <div class="msg-body">
+                  <div class="msg-top">
+                    <h3>Ana Perez</h3>
+                    <span class="msg-time">10:17 AM</span>
+                  </div>
+                  <p class="msg-subject">Important Message</p>
+                  <div class="msg-flags">
+                    <span class="flag-pill blue">Unread</span>
+                    <span class="flag-pill red">Needs acknowledge</span>
+                    <span class="flag-attach"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg> 1</span>
+                  </div>
+                </div>
+              </li>
+
+              <li class="msg-card" data-go="message-ack">
+                <div class="msg-avatar">JR</div>
+                <div class="msg-body">
+                  <div class="msg-top">
+                    <h3>Jose Ramirez</h3>
+                    <span class="msg-time">Yesterday</span>
+                  </div>
+                  <p class="msg-subject">Route adjustment for Tuesday</p>
+                  <div class="msg-flags">
+                    <span class="flag-pill green"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg> Acknowledged</span>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <nav class="tab-bar"></nav>
+        </section>
+
+
+        <!-- ===== SCREEN: MESSAGE DETAIL ===== -->
+        <section class="screen" data-screen="message">
+          <div class="app-header">
+            <div class="header-row">
+              <button class="header-icon ghost" aria-label="Back" data-go="inbox">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+              </button>
+              <h2 class="header-title">Message</h2>
+              <div style="width:48px"></div>
+            </div>
+          </div>
+
+          <div class="screen-body">
+            <div class="msg-header-card">
+              <div class="msg-avatar lg">AP</div>
+              <div>
+                <h3 class="msg-sender">Ana Perez</h3>
+                <p class="msg-date">Apr 30, 2026 · 10:17 AM</p>
+              </div>
+            </div>
+
+            <h2 class="msg-detail-title">Important Message</h2>
+
+            <div class="msg-detail-body">
+              <p>Lorem ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+              <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+            </div>
+
+            <div class="attach-block">
+              <div class="attach-label">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                Attachment
+              </div>
+              <figure class="attach-image">
+                <button class="attach-image-btn" aria-label="Open image">
+                  <svg class="attach-image-svg" viewBox="0 0 600 380" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Loading bay route map">
+                    <defs>
+                      <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0" stop-color="#fde68a"/>
+                        <stop offset="1" stop-color="#fb923c"/>
+                      </linearGradient>
+                      <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0" stop-color="#1f2937"/>
+                        <stop offset="1" stop-color="#0b1220"/>
+                      </linearGradient>
+                    </defs>
+                    <rect width="600" height="220" fill="url(#sky)"/>
+                    <rect y="220" width="600" height="160" fill="url(#ground)"/>
+                    <circle cx="470" cy="120" r="42" fill="#fef3c7" opacity="0.9"/>
+                    <path d="M0 240 L600 240" stroke="#374151" stroke-width="3"/>
+                    <path d="M40 290 L80 290 M120 290 L180 290 M220 290 L300 290 M340 290 L420 290 M460 290 L540 290" stroke="#fbbf24" stroke-width="4" stroke-linecap="round"/>
+                    <rect x="120" y="180" width="180" height="60" rx="4" fill="#475569"/>
+                    <rect x="130" y="190" width="60" height="40" rx="2" fill="#1e293b"/>
+                    <rect x="200" y="190" width="40" height="40" rx="2" fill="#1e293b"/>
+                    <rect x="250" y="190" width="40" height="40" rx="2" fill="#1e293b"/>
+                    <circle cx="155" cy="252" r="14" fill="#0b1220" stroke="#475569" stroke-width="3"/>
+                    <circle cx="265" cy="252" r="14" fill="#0b1220" stroke="#475569" stroke-width="3"/>
+                    <rect x="380" y="200" width="120" height="40" rx="2" fill="#dc2626"/>
+                    <text x="440" y="227" text-anchor="middle" font-family="system-ui" font-size="18" font-weight="700" fill="white">STOP</text>
+                  </svg>
+                  <span class="attach-image-overlay">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                  </span>
+                </button>
+                <figcaption class="attach-image-meta">
+                  <div>
+                    <strong>loading-bay-stop.png</strong>
+                    <span>PNG · 1.2 MB · 10:15 AM</span>
+                  </div>
+                  <button class="attach-download" aria-label="Download">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  </button>
+                </figcaption>
+              </figure>
+            </div>
+
+            <div class="ack-block" id="ack-block">
+              <div class="ack-info">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+                <div>
+                  <strong>Acknowledgement required</strong>
+                  <span>Tap below to confirm you've read this</span>
+                </div>
+              </div>
+              <button class="ack-button" id="ack-toggle" aria-pressed="false">
+                <span class="ack-state-off">Tap to acknowledge</span>
+                <span class="ack-state-on">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>
+                  Acknowledged
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <nav class="tab-bar"></nav>
+        </section>
+
+
+        <!-- ===== SCREEN: MESSAGE ACK (read-only acknowledged) ===== -->
+        <section class="screen" data-screen="message-ack">
+          <div class="app-header">
+            <div class="header-row">
+              <button class="header-icon ghost" aria-label="Back" data-go="inbox">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+              </button>
+              <h2 class="header-title">Message</h2>
+              <div style="width:48px"></div>
+            </div>
+          </div>
+
+          <div class="screen-body">
+            <div class="msg-header-card">
+              <div class="msg-avatar lg">JR</div>
+              <div>
+                <h3 class="msg-sender">Jose Ramirez</h3>
+                <p class="msg-date">Apr 29, 2026 · 4:18 PM</p>
+              </div>
+            </div>
+
+            <h2 class="msg-detail-title">Route adjustment for Tuesday</h2>
+
+            <div class="msg-detail-body">
+              <p>Please note the route order change for Tuesday morning. Stop #4 has been moved before #3 due to access restrictions at the loading bay.</p>
+            </div>
+
+            <div class="ack-confirmed">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>
+              <div>
+                <strong>Acknowledged</strong>
+                <span>Apr 29, 2026 at 4:22 PM</span>
+              </div>
+            </div>
+          </div>
+
+          <nav class="tab-bar"></nav>
+        </section>
+
+
+        <!-- ===== SCREEN: TRUCK EMERGENCY (MAP) ===== -->
+        <section class="screen no-tabs" data-screen="emergency">
+          <div class="app-header floating">
+            <div class="header-row">
+              <button class="header-icon solid" aria-label="Back" data-go="routes">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+              </button>
+              <h2 class="header-title-overlay">Truck emergency</h2>
+              <button class="header-icon solid alert" aria-label="Send alert" id="alert-btn">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="map-container">
+            <!-- Stylized SVG map -->
+            <svg class="map-svg" viewBox="0 0 380 700" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                  <path d="M 40 0 L 0 0 0 40" fill="none" stroke="var(--map-grid)" stroke-width="0.5"/>
+                </pattern>
+                <linearGradient id="water" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="var(--map-water-1)"/>
+                  <stop offset="100%" stop-color="var(--map-water-2)"/>
+                </linearGradient>
+              </defs>
+              <rect width="380" height="700" fill="var(--map-land)"/>
+              <rect width="380" height="700" fill="url(#grid)"/>
+              <!-- Water mass -->
+              <path d="M 280 0 Q 320 100 290 200 Q 250 280 310 380 Q 370 460 340 560 L 380 580 L 380 0 Z" fill="url(#water)" opacity="0.6"/>
+              <!-- Roads -->
+              <path d="M 0 350 Q 100 340 200 380 T 380 360" stroke="var(--map-road)" stroke-width="3" fill="none" opacity="0.5"/>
+              <path d="M 50 0 Q 80 200 120 400 T 180 700" stroke="var(--map-road)" stroke-width="2.5" fill="none" opacity="0.4"/>
+              <path d="M 0 500 Q 150 480 280 540" stroke="var(--map-road)" stroke-width="2" fill="none" opacity="0.4"/>
+            </svg>
+
+            <!-- Map pins -->
+            <button class="map-pin shop" style="top: 28%; left: 22%" data-pin="ameriflex">
+              <span class="pin-num">28</span>
+            </button>
+            <button class="map-pin trailer" style="top: 35%; left: 55%">
+              <span class="pin-num">61</span>
+            </button>
+            <button class="map-pin both" style="top: 48%; left: 38%">
+              <span class="pin-num">72</span>
+            </button>
+            <button class="map-pin shop" style="top: 55%; left: 60%">
+              <span class="pin-num">109</span>
+            </button>
+            <button class="map-pin shop" style="top: 62%; left: 28%">
+              <span class="pin-num">44</span>
+            </button>
+            <button class="map-pin both" style="top: 70%; left: 50%">
+              <span class="pin-num">36</span>
+            </button>
+            <button class="map-pin trailer" style="top: 42%; left: 18%">
+              <span class="pin-num">16</span>
+            </button>
+
+            <!-- Map legend -->
+            <div class="map-legend">
+              <div class="legend-pill">
+                <span class="dot shop"></span>
+                <span>Shop</span>
+              </div>
+              <div class="legend-pill">
+                <span class="dot trailer"></span>
+                <span>Trailer</span>
+              </div>
+              <div class="legend-pill">
+                <span class="dot both"></span>
+                <span>Both</span>
+              </div>
+            </div>
+
+            <!-- Location detail card -->
+            <div class="loc-card" id="loc-card">
+              <div class="loc-handle"></div>
+              <div class="loc-header">
+                <div class="loc-title-block">
+                  <h3>AmeriFlex</h3>
+                  <p>12940 E Admiral Pl, OK 74116</p>
+                  <div class="loc-distance">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+                    <span><strong>1,448</strong> miles away</span>
+                  </div>
+                </div>
+                <div class="loc-types">
+                  <div class="type-chip shop">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1-6h16l1 6"/><path d="M3 9v11a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V9"/></svg>
+                    Shop
+                  </div>
+                </div>
+              </div>
+
+              <div class="loc-detail-row">
+                <span class="dt-label">Service</span>
+                <span class="dt-value">Hose and Fittings</span>
+              </div>
+              <div class="loc-detail-row">
+                <span class="dt-label">Contact</span>
+                <span class="dt-value muted">Not available</span>
+              </div>
+
+              <div class="loc-actions">
+                <button class="loc-action call" id="call-btn">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  Call
+                </button>
+                <button class="loc-action navigate" id="nav-btn">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+                  Navigate
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ===== SCREEN: SECURITY CHECKLIST ===== -->
+        <section class="screen" data-screen="checklist">
+          <div class="app-header">
+            <div class="header-row">
+              <h2 class="header-title">Security checklist</h2>
+              <button class="text-action" id="checklist-save">Save</button>
+            </div>
+            <div class="checklist-progress">
+              <div class="cp-bar"><div class="cp-fill" id="cp-fill" style="width: 0%"></div></div>
+              <span class="cp-label"><span id="cp-count">0</span>/8 completed</span>
+            </div>
+            <p class="checklist-intro">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+              Required once daily before starting your route
+            </p>
+          </div>
+
+          <div class="screen-body">
+
+            <div class="check-item">
+              <div class="check-num">1</div>
+              <div class="check-q">
+                <p class="check-text">Truck unit number</p>
+                <input type="text" class="check-input" placeholder="Enter unit number" />
+              </div>
+            </div>
+
+            <div class="check-item" data-check="2">
+              <div class="check-num">2</div>
+              <div class="check-q">
+                <p class="check-text">Have you inspected your overflow protection devices and verified proper operation for the alarm and pump shutoff?</p>
+                <div class="yn-group">
+                  <button class="yn-btn yes" data-val="yes">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>
+                    Yes
+                  </button>
+                  <button class="yn-btn no" data-val="no">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                    No
+                  </button>
+                </div>
+                <textarea class="check-notes" placeholder="Add notes about the issue..."></textarea>
+              </div>
+            </div>
+
+            <div class="check-item" data-check="3">
+              <div class="check-num">3</div>
+              <div class="check-q">
+                <p class="check-text">Have you calibrated your "Halogen Sniffer" and ensured it is working properly?</p>
+                <div class="yn-group">
+                  <button class="yn-btn yes" data-val="yes"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>Yes</button>
+                  <button class="yn-btn no" data-val="no"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>No</button>
+                </div>
+                <textarea class="check-notes" placeholder="Add notes about the issue..."></textarea>
+              </div>
+            </div>
+
+            <div class="check-item" data-check="4">
+              <div class="check-num">4</div>
+              <div class="check-q">
+                <p class="check-text">Is your Elog current?</p>
+                <div class="yn-group">
+                  <button class="yn-btn yes" data-val="yes"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>Yes</button>
+                  <button class="yn-btn no" data-val="no"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>No</button>
+                </div>
+                <textarea class="check-notes" placeholder="Add notes about the issue..."></textarea>
+              </div>
+            </div>
+
+            <div class="check-item" data-check="5">
+              <div class="check-num">5</div>
+              <div class="check-q">
+                <p class="check-text">Did you physically verify the level in each tank compartment prior to starting your route?</p>
+                <div class="yn-group">
+                  <button class="yn-btn yes" data-val="yes"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>Yes</button>
+                  <button class="yn-btn no" data-val="no"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>No</button>
+                </div>
+                <textarea class="check-notes" placeholder="Add notes about the issue..."></textarea>
+              </div>
+            </div>
+
+            <div class="check-item" data-check="6">
+              <div class="check-num">6</div>
+              <div class="check-q">
+                <p class="check-text">Are all tank valves closed in the proper position?</p>
+                <div class="yn-group">
+                  <button class="yn-btn yes" data-val="yes"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>Yes</button>
+                  <button class="yn-btn no" data-val="no"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>No</button>
+                </div>
+                <textarea class="check-notes" placeholder="Add notes about the issue..."></textarea>
+              </div>
+            </div>
+
+            <div class="check-item" data-check="7">
+              <div class="check-num">7</div>
+              <div class="check-q">
+                <p class="check-text">Did you complete the PTI and is the vehicle DOT compliant for operation?</p>
+                <div class="yn-group">
+                  <button class="yn-btn yes" data-val="yes"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>Yes</button>
+                  <button class="yn-btn no" data-val="no"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>No</button>
+                </div>
+                <textarea class="check-notes" placeholder="Add notes about the issue..."></textarea>
+              </div>
+            </div>
+
+            <div class="check-item subgroup" data-check="8">
+              <div class="check-num">8</div>
+              <div class="check-q">
+                <p class="check-text">Do you have the proper spill response material on your truck?</p>
+                <div class="sub-checks">
+                  <div class="sub-item">
+                    <span>4 socks/booms, 3" × 8'</span>
+                    <div class="yn-group small">
+                      <button class="yn-btn yes" data-val="yes"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg>Yes</button>
+                      <button class="yn-btn no" data-val="no"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>No</button>
+                    </div>
+                  </div>
+                  <div class="sub-item">
+                    <span>One full bundle oil dry pads, 19" × 17"</span>
+                    <div class="yn-group small">
+                      <button class="yn-btn yes" data-val="yes"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg>Yes</button>
+                      <button class="yn-btn no" data-val="no"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>No</button>
+                    </div>
+                  </div>
+                  <div class="sub-item">
+                    <span>½ bundle universal pads, 19" × 17"</span>
+                    <div class="yn-group small">
+                      <button class="yn-btn yes" data-val="yes"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg>Yes</button>
+                      <button class="yn-btn no" data-val="no"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>No</button>
+                    </div>
+                  </div>
+                  <div class="sub-item">
+                    <span>5 heavy-duty disposal bags for storm drains</span>
+                    <div class="yn-group small">
+                      <button class="yn-btn yes" data-val="yes"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg>Yes</button>
+                      <button class="yn-btn no" data-val="no"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>No</button>
+                    </div>
+                  </div>
+                  <div class="sub-item">
+                    <span>2 × 50 lb oil-dri absorbent bags</span>
+                    <div class="yn-group small">
+                      <button class="yn-btn yes" data-val="yes"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg>Yes</button>
+                      <button class="yn-btn no" data-val="no"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>No</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <button class="big-cta">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>
+              Submit checklist
+            </button>
+          </div>
+        </section>
+
+      </div><!-- /screens -->
+
+      <!-- ===== POPUPS ===== -->
+      <div class="popup-overlay" id="popup-error">
+        <div class="popup error">
+          <div class="popup-icon error-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <h3>Duplicate route</h3>
+          <p>A route with this name and date already exists. Please choose a different name or date.</p>
+          <button class="popup-btn primary" data-close>Got it</button>
+        </div>
+      </div>
+
+      <div class="popup-overlay" id="popup-caution">
+        <div class="popup caution">
+          <div class="popup-icon caution-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <h3>Winter ahead</h3>
+          <p>Check your route for severe weather warnings. Drive carefully.</p>
+          <button class="popup-btn primary" data-close>OK, I understand</button>
+        </div>
+      </div>
+
+      <div class="popup-overlay" id="popup-emergency">
+        <div class="popup emergency">
+          <div class="popup-icon alert-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <h3>Notify dispatcher</h3>
+          <p>Describe the emergency briefly. Dispatch will be alerted immediately.</p>
+          <textarea placeholder="e.g. Engine overheating near mile 142 on I-40..." class="popup-textarea"></textarea>
+          <div class="popup-actions">
+            <button class="popup-btn ghost" data-close>Cancel</button>
+            <button class="popup-btn danger">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+              Notify now
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="popup-overlay" id="popup-navigation">
+        <div class="popup nav-popup">
+          <h3>Navigate with</h3>
+          <div class="nav-options">
+            <button class="nav-option">
+              <div class="nav-option-icon apple">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.94-3.08.49-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.49C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+              </div>
+              <span>Apple Maps</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+            <button class="nav-option">
+              <div class="nav-option-icon google">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>
+              </div>
+              <span>Google Maps</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+            <button class="nav-option">
+              <div class="nav-option-icon waze">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M20.54 6.63c-.69-1.07-1.62-1.99-2.72-2.7-1.13-.73-2.4-1.22-3.74-1.45-.43-.07-.86-.13-1.29-.16-1.85-.13-3.7.18-5.4.91C5.71 4 4.21 5.13 3.04 6.61c-1.39 1.78-2.04 3.99-1.84 6.24.05.71.16 1.42.32 2.11.31 1.31.85 2.56 1.59 3.69.04.05.07.11.07.17 0 .15-.04.31-.04.46 0 1.55 1.26 2.81 2.81 2.81.92 0 1.78-.45 2.31-1.21.07-.1.16-.18.27-.21 1.31.31 2.65.41 3.99.31.91-.07 1.81-.24 2.69-.5.13-.04.27 0 .37.09.5.46 1.16.72 1.85.72 1.55 0 2.81-1.26 2.81-2.81 0-.5-.13-.99-.39-1.43-.07-.13-.07-.29.02-.41 1.34-1.85 2.04-4.08 2.04-6.36 0-1.43-.31-2.83-.93-4.11l.13-.04z"/></svg>
+              </div>
+              <span>Waze</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+          </div>
+          <button class="popup-btn ghost full" data-close>Cancel</button>
+        </div>
+      </div>
+
+      <div class="popup-overlay" id="popup-call">
+        <div class="popup call-popup">
+          <div class="popup-icon call-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          </div>
+          <h3>Call AmeriFlex</h3>
+          <p class="phone-num">+1 (918) 555-0142</p>
+          <div class="popup-actions">
+            <button class="popup-btn ghost" data-close>Cancel</button>
+            <button class="popup-btn primary call">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              Call now
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom sheet: date picker -->
+      <div class="sheet-overlay" id="sheet-datepicker" aria-hidden="true">
+        <div class="sheet" role="dialog" aria-label="Select date">
+          <div class="sheet-handle"></div>
+          <div class="sheet-header">
+            <h3>Select date</h3>
+            <button class="sheet-close" data-close aria-label="Close">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
+          </div>
+          <div class="calendar-card flush">
+            <div class="cal-header">
+              <button class="cal-arrow" aria-label="Previous month">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+              </button>
+              <div class="cal-month">
+                <strong>April</strong>
+                <span>2026</span>
+              </div>
+              <button class="cal-arrow" aria-label="Next month">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+              </button>
+            </div>
+            <div class="cal-weekdays">
+              <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+            </div>
+            <div class="cal-grid" id="cal-grid"></div>
+            <div class="cal-legend">
+              <div class="legend-item"><span class="legend-dot has-routes"></span> Has routes</div>
+              <div class="legend-item"><span class="legend-dot today"></span> Today</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Toast -->
+      <div class="toast" id="toast">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>
+        <span id="toast-msg">Saved</span>
+      </div>
+
+    </div><!-- /phone -->
+
+    <!-- Side panel: screen navigator -->
+    <aside class="screen-nav">
+      <div class="nav-header">
+        <h4>Screens</h4>
+        <span>Tap to preview</span>
+      </div>
+      <ul class="nav-list">
+        <li><button data-go="routes" class="active">
+          <span class="nav-num">01</span>
+          <div><strong>Route list</strong><span>Daily routes overview</span></div>
+        </button></li>
+        <li><button data-sheet="datepicker">
+          <span class="nav-num">02</span>
+          <div><strong>Date picker</strong><span>Bottom sheet · calendar</span></div>
+        </button></li>
+        <li><button data-go="create">
+          <span class="nav-num">03</span>
+          <div><strong>Create route</strong><span>New route form</span></div>
+        </button></li>
+        <li><button data-go="inbox">
+          <span class="nav-num">04</span>
+          <div><strong>Inbox</strong><span>Messages list</span></div>
+        </button></li>
+        <li><button data-go="message">
+          <span class="nav-num">05</span>
+          <div><strong>Message detail</strong><span>With acknowledge</span></div>
+        </button></li>
+        <li><button data-go="message-ack">
+          <span class="nav-num">06</span>
+          <div><strong>Message acknowledged</strong><span>Read state</span></div>
+        </button></li>
+        <li><button data-go="emergency">
+          <span class="nav-num">07</span>
+          <div><strong>Truck emergency</strong><span>Map with shops</span></div>
+        </button></li>
+        <li><button data-go="checklist">
+          <span class="nav-num">08</span>
+          <div><strong>Security checklist</strong><span>Daily form</span></div>
+        </button></li>
+      </ul>
+
+      <div class="nav-divider"></div>
+
+      <div class="nav-header"><h4>Trigger states</h4></div>
+      <ul class="nav-list">
+        <li><button data-popup="popup-error" class="state-btn">
+          <span class="state-icon error">!</span>Error popup
+        </button></li>
+        <li><button data-popup="popup-caution" class="state-btn">
+          <span class="state-icon warn">⚠</span>Caution alert
+        </button></li>
+        <li><button data-popup="popup-emergency" class="state-btn">
+          <span class="state-icon danger">!</span>Emergency dialog
+        </button></li>
+        <li><button data-popup="popup-navigation" class="state-btn">
+          <span class="state-icon nav">→</span>Navigation picker
+        </button></li>
+        <li><button data-popup="popup-call" class="state-btn">
+          <span class="state-icon call">☎</span>Call confirm
+        </button></li>
+      </ul>
+    </aside>
+
+  </main>
+
+  <footer class="legend-footer">
+    <div class="lf-item">
+      <strong>Targets ≥ 56px</strong>
+      <span>For gloved/large hands</span>
+    </div>
+    <div class="lf-item">
+      <strong>High contrast</strong>
+      <span>Readable under direct sun</span>
+    </div>
+    <div class="lf-item">
+      <strong>Explicit states</strong>
+      <span>No ambiguous toggles</span>
+    </div>
+    <div class="lf-item">
+      <strong>One primary action</strong>
+      <span>Per screen</span>
+    </div>
+  </footer>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
