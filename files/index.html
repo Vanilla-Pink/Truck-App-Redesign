@@ -110,35 +110,7 @@
               </button>
             </div>
 
-            <ul class="route-list">
-              <li class="route-card">
-                <div class="route-icon" style="--accent: var(--green-500);">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg>
-                </div>
-                <div class="route-meta">
-                  <h3>Monday Route</h3>
-                  <div class="route-progress">
-                    <div class="progress-bar"><div class="progress-fill" style="width: 7.7%"></div></div>
-                    <span class="progress-label"><strong>1</strong> / 13 stops</span>
-                  </div>
-                </div>
-                <svg class="chev" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-              </li>
-
-              <li class="route-card">
-                <div class="route-icon" style="--accent: var(--amber-500);">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg>
-                </div>
-                <div class="route-meta">
-                  <h3>Tuesday Route</h3>
-                  <div class="route-progress">
-                    <div class="progress-bar"><div class="progress-fill" style="width: 0%"></div></div>
-                    <span class="progress-label"><strong>0</strong> / 21 stops</span>
-                  </div>
-                </div>
-                <svg class="chev" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-              </li>
-            </ul>
+            <ul class="route-list" id="route-list"></ul>
 
             <p class="hint-text">Pull down to refresh</p>
           </div>
@@ -503,6 +475,48 @@
         </section>
 
 
+        <!-- ===== SCREEN: STOPS ===== -->
+        <section class="screen" data-screen="stops">
+          <div class="app-header">
+            <div class="header-row">
+              <div class="route-pill">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg>
+                <span id="stops-route-name"><strong>Monday</strong> Route</span>
+              </div>
+              <button class="header-icon" aria-label="Filter">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+              </button>
+            </div>
+            <div class="stops-header-progress">
+              <div class="progress-bar"><div class="progress-fill stops-pf" style="width: 7.7%"></div></div>
+              <span class="progress-label"><strong id="stops-done-count">1</strong> / <span id="stops-total-count">13</span> completed</span>
+            </div>
+          </div>
+          <div class="screen-body">
+            <ul class="stop-list" id="stop-list"></ul>
+          </div>
+          <nav class="tab-bar"></nav>
+        </section>
+
+
+        <!-- ===== SCREEN: STOP DETAIL ===== -->
+        <section class="screen" data-screen="stop-detail">
+          <div class="app-header">
+            <div class="header-row">
+              <button class="header-icon ghost" aria-label="Back" data-go="stops">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+              </button>
+              <h2 class="header-title" id="detail-title">Stop #1</h2>
+              <div style="width:48px"></div>
+            </div>
+          </div>
+          <div class="screen-body">
+            <div id="stop-detail-content"></div>
+          </div>
+          <nav class="tab-bar"></nav>
+        </section>
+
+
         <!-- ===== SCREEN: SECURITY CHECKLIST ===== -->
         <section class="screen" data-screen="checklist">
           <div class="app-header">
@@ -749,6 +763,65 @@
         </div>
       </div>
 
+      <!-- Popup: GPS capture -->
+      <div class="popup-overlay" id="popup-gps">
+        <div class="popup">
+          <div class="popup-icon" style="background: var(--brand-50); color: var(--brand-500);">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8" stroke-opacity="0.35"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>
+          </div>
+          <h3>Capture GPS Location</h3>
+          <p id="gps-popup-address">Confirm you are physically at this location.</p>
+          <div class="popup-actions">
+            <button class="popup-btn ghost" data-close>Cancel</button>
+            <button class="popup-btn primary" id="confirm-gps-btn">Confirm</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom sheet: invoices -->
+      <div class="sheet-overlay" id="sheet-invoices" aria-hidden="true">
+        <div class="sheet">
+          <div class="sheet-handle"></div>
+          <div class="sheet-header">
+            <h3>Pay Invoices</h3>
+            <button class="sheet-close" data-close aria-label="Close">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
+          </div>
+          <div class="invoice-list">
+            <div class="invoice-item">
+              <div class="inv-info">
+                <strong>INV-2026-0441</strong>
+                <span>Apr 23, 2026 · Fuel delivery 275 gal</span>
+              </div>
+              <span class="inv-amount">$412.50</span>
+            </div>
+            <div class="invoice-item">
+              <div class="inv-info">
+                <strong>INV-2026-0388</strong>
+                <span>Apr 16, 2026 · Service call</span>
+              </div>
+              <span class="inv-amount">$85.00</span>
+            </div>
+            <div class="invoice-item overdue">
+              <div class="inv-info">
+                <strong>INV-2026-0301</strong>
+                <span>Apr 2, 2026 · Tank inspection</span>
+              </div>
+              <span class="inv-amount">$150.00</span>
+            </div>
+          </div>
+          <div class="invoice-total">
+            <span>Total due</span>
+            <strong>$647.50</strong>
+          </div>
+          <button class="big-cta" style="margin-top:16px">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>
+            Pay $647.50
+          </button>
+        </div>
+      </div>
+
       <!-- Bottom sheet: date picker -->
       <div class="sheet-overlay" id="sheet-datepicker" aria-hidden="true">
         <div class="sheet" role="dialog" aria-label="Select date">
@@ -830,6 +903,14 @@
         <li><button data-go="checklist">
           <span class="nav-num">08</span>
           <div><strong>Security checklist</strong><span>Daily form</span></div>
+        </button></li>
+        <li><button data-go="stops">
+          <span class="nav-num">09</span>
+          <div><strong>Stops</strong><span>Today's route stops</span></div>
+        </button></li>
+        <li><button data-go="stop-detail">
+          <span class="nav-num">10</span>
+          <div><strong>Stop detail</strong><span>Individual stop view</span></div>
         </button></li>
       </ul>
 
