@@ -401,9 +401,15 @@
         <div class="stop-meta">
           <div class="stop-codes">${stop.companyCode} · ${stop.locationCode}</div>
           <div class="stop-name">${stop.name}</div>
-          <div class="stop-address">${stop.address}</div>
+          <div class="stop-address">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="stop-row-icon"><path d="M20 10c0 6-8 13-8 13s-8-7-8-13a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            ${stop.address}
+          </div>
           <div class="stop-tags">
-            <span class="stop-gal-row">C: ${stop.gallonsC} · TL: ${stop.gallonsTL} gal</span>
+            <span class="stop-gal-row">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="stop-row-icon"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg>
+              C: ${stop.gallonsC} · TL: ${stop.gallonsTL} gal
+            </span>
           </div>
           <div class="stop-service-chips">${pastDueChip}${chips}</div>
         </div>

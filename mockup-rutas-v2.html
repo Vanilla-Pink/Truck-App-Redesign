@@ -2292,8 +2292,7 @@
     width: 11px; height: 11px;
     flex-shrink: 0;
   }
-  #rg-route-tuesday .rg-past-due,
-  #rg-route-wednesday .rg-past-due {
+  .rg-past-due {
     padding: 2px 7px;
     background: var(--danger-soft);
     border-radius: var(--radius-full);
@@ -2408,8 +2407,8 @@
     letter-spacing: 0.5px;
     padding: 2px 6px;
     border-radius: 4px;
-    background: var(--primary-softer);
-    color: var(--primary);
+    background: var(--bg-app);
+    color: var(--text-secondary);
     text-transform: uppercase;
   }
   .rg-tag.warning { background: var(--warning-softer); color: var(--warning); }
@@ -2464,6 +2463,21 @@
     color: var(--text-secondary);
     margin-top: 4px;
     line-height: 1.4;
+    display: flex;
+    align-items: flex-start;
+    gap: 5px;
+  }
+  .rg-stop-addr::before {
+    content: '';
+    display: block;
+    flex-shrink: 0;
+    width: 12px;
+    height: 12px;
+    margin-top: 1px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%234B5563' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 10c0 6-8 13-8 13s-8-7-8-13a8 8 0 0 1 16 0z'/%3E%3Ccircle cx='12' cy='10' r='3'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0.7;
   }
   .rg-stop-cap {
     font-size: 11px;
@@ -2471,11 +2485,23 @@
     color: var(--text-secondary);
     margin-top: 8px;
     letter-spacing: 0.1px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .rg-stop-cap::before {
+    content: '';
+    display: block;
+    flex-shrink: 0;
+    width: 12px;
+    height: 12px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%234B5563' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0.7;
   }
   #rg-route-monday .rg-stop-cap {
     margin-top: 4px;
-    text-align: right;
-    white-space: nowrap;
   }
   #rg-route-monday .rg-stop-code {
     min-width: 120px;
@@ -2655,10 +2681,10 @@
   }
 
   .rg-side-panel {
-    width: 76px;
+    width: 50px;
     flex-shrink: 0;
-    background: var(--bg-header);
-    color: white;
+    background: #E5E7EB;
+    color: #6B7280;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -2666,7 +2692,6 @@
     padding: 14px 8px;
     border-radius: 16px 0 0 16px;
     text-align: center;
-    box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.12);
     gap: 2px;
   }
 
@@ -2695,19 +2720,20 @@
   }
 
   .rg-side-stop {
-    font-size: 10px;
+    font-size: 8px;
     font-weight: 800;
-    letter-spacing: 2.2px;
-    color: rgba(255, 255, 255, 0.72);
+    letter-spacing: 1.8px;
+    color: currentColor;
+    opacity: 0.7;
     text-transform: uppercase;
   }
 
   .rg-side-num {
-    font-size: 26px;
+    font-size: 22px;
     font-weight: 800;
     line-height: 1;
     letter-spacing: -0.5px;
-    color: white;
+    color: currentColor;
   }
 
   .variant-body {
@@ -2718,8 +2744,12 @@
 
   .rg-stop.variant-side.done { opacity: 1; }
   .rg-stop.variant-side.done .rg-side-panel {
-    background: var(--success);
-    box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.1);
+    background: var(--success-soft);
+    color: var(--success);
+  }
+  .rg-stop.variant-side.current .rg-side-panel {
+    background: var(--primary-soft);
+    color: var(--primary);
   }
   .rg-stop.variant-side.done .variant-content {
     opacity: 0.72;
@@ -2727,9 +2757,13 @@
 
   .variant-side .rg-stop-tags.variant-tags {
     margin: 0;
-    justify-content: flex-end;
+    justify-content: flex-start;
     max-width: 100%;
     flex-wrap: wrap;
+    gap: 6px;
+  }
+  .variant-side .rg-stop-tags.variant-tags .rg-past-due {
+    margin-right: 2px;
   }
 
   .variant-divider {
@@ -2738,7 +2772,6 @@
     margin: 2px 0;
   }
 
-  /* Blue-split two-tone code chip */
   .rg-code-split {
     display: inline-flex;
     align-items: stretch;
@@ -2750,18 +2783,20 @@
     flex-shrink: 0;
     font-variant-numeric: tabular-nums;
     line-height: 1;
+    border: 1.5px solid #D1D5DB;
   }
   .rg-code-split-co {
-    background: var(--bg-header);
-    color: white;
+    background: transparent;
+    color: #4B5563;
     padding: 4px 7px;
     font-weight: 800;
   }
   .rg-code-split-loc {
-    background: rgba(11, 27, 54, 0.08);
-    color: var(--bg-header);
+    background: transparent;
+    color: #4B5563;
     padding: 4px 7px;
     font-weight: 700;
+    border-left: 1.5px solid #D1D5DB;
   }
   .variant-side .rg-stop-name {
     font-size: 15px;
@@ -4943,105 +4978,79 @@
 
             <div class="route-group-stops">
 
-              <div class="rg-stop done" onclick="goToScreen('parada-detalle')" style="cursor:pointer;">
-                <div class="rg-stop-head">
-                  <div class="rg-mn-row1">
-                    <div style="display:flex;align-items:center;gap:8px;">
-                      <div class="rg-stop-num">1</div>
-                      <div class="rg-stop-code">TIR823 #81</div>
-                    </div>
-                  </div>
-                  <div class="rg-stop-tags"><span class="rg-tag">OW</span><span class="rg-tag">UA</span><span class="rg-tag">OSF</span></div>
-                </div>
-                <div class="rg-stop-body">
-                  <div class="rg-mn-name-row">
+              <div class="rg-stop variant-side done" onclick="goToScreen('parada-detalle')" style="cursor:pointer;">
+                <div class="rg-side-panel"><div class="rg-side-stop">STOP</div><div class="rg-side-num">01</div></div>
+                <div class="variant-content">
+                  <div class="rg-top-row"><div class="rg-code-split"><span class="rg-code-split-co">TIR823</span><span class="rg-code-split-loc">#81</span></div></div>
+                  <div class="variant-body">
                     <div class="rg-stop-name">Tire Kingdom - 4151</div>
-                    <svg class="rg-stop-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                    <div class="rg-stop-addr">450 State Road 7<br>Royal Palm Beach, FL 33411</div>
+                    <div class="rg-stop-cap">C 275 gal · TL 275 gal <span class="pct">(100%)</span></div>
                   </div>
-                  <div class="rg-stop-addr">450 State Road 7<br>Royal Palm Beach, FL 33411</div>
-                  <div class="rg-stop-cap"><strong>C:</strong> 275 gal · <strong>TL:</strong> 275 gal <span class="pct">(100%)</span></div>
+                  <div class="variant-divider"></div>
+                  <div class="rg-stop-tags variant-tags"><span class="rg-tag">OW</span><span class="rg-tag">UA</span><span class="rg-tag">OSF</span></div>
                 </div>
+                <svg class="rg-side-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
               </div>
 
-              <div class="rg-stop done">
-                <div class="rg-stop-head">
-                  <div class="rg-mn-row1">
-                    <div style="display:flex;align-items:center;gap:8px;">
-                      <div class="rg-stop-num">2</div>
-                      <div class="rg-stop-code">FIR217 #906372</div>
-                    </div>
-                  </div>
-                  <div class="rg-stop-tags"><span class="rg-tag">OW</span><span class="rg-tag">UA</span><span class="rg-tag">OSF</span></div>
-                </div>
-                <div class="rg-stop-body">
-                  <div class="rg-mn-name-row">
+              <div class="rg-stop variant-side done">
+                <div class="rg-side-panel"><div class="rg-side-stop">STOP</div><div class="rg-side-num">02</div></div>
+                <div class="variant-content">
+                  <div class="rg-top-row"><div class="rg-code-split"><span class="rg-code-split-co">FIR217</span><span class="rg-code-split-loc">#906372</span></div></div>
+                  <div class="variant-body">
                     <div class="rg-stop-name">Firestone - 906372</div>
-                    <svg class="rg-stop-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                    <div class="rg-stop-addr">8895 Lantana Rd<br>Lake Worth, FL 33467</div>
+                    <div class="rg-stop-cap">C 245 gal · TL 245 gal <span class="pct">(100%)</span></div>
                   </div>
-                  <div class="rg-stop-addr">8895 Lantana Rd<br>Lake Worth, FL 33467</div>
-                  <div class="rg-stop-cap"><strong>C:</strong> 245 gal · <strong>TL:</strong> 245 gal <span class="pct">(100%)</span></div>
+                  <div class="variant-divider"></div>
+                  <div class="rg-stop-tags variant-tags"><span class="rg-tag">OW</span><span class="rg-tag">UA</span><span class="rg-tag">OSF</span></div>
                 </div>
+                <svg class="rg-side-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
               </div>
 
-              <div class="rg-stop current">
-                <div class="rg-stop-head">
-                  <div class="rg-mn-row1">
-                    <div style="display:flex;align-items:center;gap:8px;">
-                      <div class="rg-stop-num">3</div>
-                      <div class="rg-stop-code">MAV358 #2320</div>
-                    </div>
-                  </div>
-                  <div class="rg-stop-tags"><span class="rg-tag">OW</span><span class="rg-tag">UO</span><span class="rg-tag">UA</span></div>
-                </div>
-                <div class="rg-stop-body">
-                  <div class="rg-mn-name-row">
+              <div class="rg-stop variant-side current">
+                <div class="rg-side-panel"><div class="rg-side-stop">STOP</div><div class="rg-side-num">03</div></div>
+                <div class="variant-content">
+                  <div class="rg-top-row"><div class="rg-code-split"><span class="rg-code-split-co">MAV358</span><span class="rg-code-split-loc">#2320</span></div></div>
+                  <div class="variant-body">
                     <div class="rg-stop-name">Mavis Tires - 2320</div>
-                    <svg class="rg-stop-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                    <div class="rg-stop-addr">5045 S US Highway 1<br>Fort Pierce, FL 34982</div>
+                    <div class="rg-stop-cap">C 320 gal · TL 0 gal <span class="pct success">(0%)</span></div>
                   </div>
-                  <div class="rg-stop-addr">5045 S US Highway 1<br>Fort Pierce, FL 34982</div>
-                  <div class="rg-stop-cap"><strong>C:</strong> 320 gal · <strong>TL:</strong> 0 gal <span class="pct">(0%)</span></div>
+                  <div class="variant-divider"></div>
+                  <div class="rg-stop-tags variant-tags"><span class="rg-tag">OW</span><span class="rg-tag">UO</span><span class="rg-tag">UA</span></div>
                 </div>
+                <svg class="rg-side-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
               </div>
 
-              <div class="rg-stop">
-                <div class="rg-stop-head">
-                  <div class="rg-mn-row1">
-                    <div style="display:flex;align-items:center;gap:8px;">
-                      <div class="rg-stop-num">4</div>
-                      <div class="rg-stop-code">ARR445 #5851</div>
-                    </div>
-                    <span class="rg-past-due"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Past Due</span>
-                  </div>
-                  <div class="rg-stop-tags"><span class="rg-tag">OSF</span><span class="rg-tag">UA</span><span class="rg-tag">UO</span><span class="rg-tag">OW</span></div>
-                </div>
-                <div class="rg-stop-body">
-                  <div class="rg-mn-name-row">
+              <div class="rg-stop variant-side">
+                <div class="rg-side-panel"><div class="rg-side-stop">STOP</div><div class="rg-side-num">04</div></div>
+                <div class="variant-content">
+                  <div class="rg-top-row"><div class="rg-code-split"><span class="rg-code-split-co">ARR445</span><span class="rg-code-split-loc">#5851</span></div></div>
+                  <div class="variant-body">
                     <div class="rg-stop-name">Arrigo CDJR of Ft. Pierce</div>
-                    <svg class="rg-stop-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                    <div class="rg-stop-addr">5851 S US Highway 1<br>Fort Pierce, FL 34982</div>
+                    <div class="rg-stop-cap">C 550 gal · TL 0 gal <span class="pct success">(0%)</span></div>
                   </div>
-                  <div class="rg-stop-addr">5851 S US Highway 1<br>Fort Pierce, FL 34982</div>
-                  <div class="rg-stop-cap"><strong>C:</strong> 550 gal · <strong>TL:</strong> 0 gal <span class="pct">(0%)</span></div>
+                  <div class="variant-divider"></div>
+                  <div class="rg-stop-tags variant-tags"><span class="rg-past-due"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Past Due</span><span class="rg-tag">OSF</span><span class="rg-tag">UA</span><span class="rg-tag">UO</span><span class="rg-tag">OW</span></div>
                 </div>
+                <svg class="rg-side-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
               </div>
 
-              <div class="rg-stop">
-                <div class="rg-stop-head">
-                  <div class="rg-mn-row1">
-                    <div style="display:flex;align-items:center;gap:8px;">
-                      <div class="rg-stop-num">5</div>
-                      <div class="rg-stop-code">BRG902 #0112</div>
-                    </div>
-                  </div>
-                  <div class="rg-stop-tags"><span class="rg-tag">OW</span><span class="rg-tag">UO</span></div>
-                </div>
-                <div class="rg-stop-body">
-                  <div class="rg-mn-name-row">
+              <div class="rg-stop variant-side">
+                <div class="rg-side-panel"><div class="rg-side-stop">STOP</div><div class="rg-side-num">05</div></div>
+                <div class="variant-content">
+                  <div class="rg-top-row"><div class="rg-code-split"><span class="rg-code-split-co">BRG902</span><span class="rg-code-split-loc">#0112</span></div></div>
+                  <div class="variant-body">
                     <div class="rg-stop-name">Bridgestone - 0112</div>
-                    <svg class="rg-stop-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                    <div class="rg-stop-addr">118 Harbor Blvd<br>Fort Pierce, FL 34950</div>
+                    <div class="rg-stop-cap">C 410 gal · TL 0 gal <span class="pct success">(0%)</span></div>
                   </div>
-                  <div class="rg-stop-addr">118 Harbor Blvd<br>Fort Pierce, FL 34950</div>
-                  <div class="rg-stop-cap"><strong>C:</strong> 410 gal · <strong>TL:</strong> 0 gal <span class="pct">(0%)</span></div>
+                  <div class="variant-divider"></div>
+                  <div class="rg-stop-tags variant-tags"><span class="rg-tag">OW</span><span class="rg-tag">UO</span></div>
                 </div>
+                <svg class="rg-side-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
               </div>
 
             </div>
@@ -5119,13 +5128,11 @@
                     <div class="rg-stop-cap">C 220 gal · TL 0 gal <span class="pct success">(0%)</span></div>
                   </div>
                   <div class="variant-divider" aria-hidden="true"></div>
-                  <div style="display:flex; align-items:center; justify-content:space-between;">
+                  <div class="rg-stop-tags variant-tags">
                     <span class="rg-past-due"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Past Due</span>
-                    <div class="rg-stop-tags variant-tags" style="margin:0;">
-                      <span class="rg-tag">OW</span>
-                      <span class="rg-tag">UO</span>
-                      <span class="rg-tag">UA</span>
-                    </div>
+                    <span class="rg-tag">OW</span>
+                    <span class="rg-tag">UO</span>
+                    <span class="rg-tag">UA</span>
                   </div>
                 </div>
                 <svg class="rg-side-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
@@ -5182,100 +5189,66 @@
               <div class="route-group-progress-fill" style="width: 25%;"></div>
             </div>
 
-            <div class="route-group-stops card-style">
+            <div class="route-group-stops">
 
-              <div class="rg-stop done">
-                <div class="rg-stop-head">
-                  <div class="rg-stop-num">1</div>
-                  <div class="rg-stop-code">GOO712 #1044</div>
-                </div>
-                <div class="rg-stop-body">
-                  <div class="rg-stop-info">
+              <div class="rg-stop variant-side done">
+                <div class="rg-side-panel"><div class="rg-side-stop">STOP</div><div class="rg-side-num">01</div></div>
+                <div class="variant-content">
+                  <div class="rg-top-row"><div class="rg-code-split"><span class="rg-code-split-co">GOO712</span><span class="rg-code-split-loc">#1044</span></div></div>
+                  <div class="variant-body">
                     <div class="rg-stop-name">Goodyear - 1044</div>
-                    <div class="rg-stop-addr">
-                      210 NW 42nd Ave<br>
-                      Miami, FL 33126
-                    </div>
-                    <div class="rg-stop-cap"><strong>C:</strong> 400 gal · <strong>TL:</strong> 400 gal <span class="pct">(100%)</span></div>
+                    <div class="rg-stop-addr">210 NW 42nd Ave<br>Miami, FL 33126</div>
+                    <div class="rg-stop-cap">C 400 gal · TL 400 gal <span class="pct">(100%)</span></div>
                   </div>
-                  <svg class="rg-stop-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                  <div class="variant-divider"></div>
+                  <div class="rg-stop-tags variant-tags"><span class="rg-tag">OW</span><span class="rg-tag">UA</span></div>
                 </div>
-                <div class="variant-divider" aria-hidden="true"></div>
-                <div class="rg-stop-tags variant-tags">
-                  <span class="rg-tag">OW</span>
-                  <span class="rg-tag">UA</span>
-                </div>
+                <svg class="rg-side-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
               </div>
 
-              <div class="rg-stop current">
-                <div class="rg-stop-head">
-                  <div class="rg-stop-num">2</div>
-                  <div class="rg-stop-code">NTB550 #3381</div>
-                </div>
-                <div class="rg-stop-body">
-                  <div class="rg-stop-info">
+              <div class="rg-stop variant-side current">
+                <div class="rg-side-panel"><div class="rg-side-stop">STOP</div><div class="rg-side-num">02</div></div>
+                <div class="variant-content">
+                  <div class="rg-top-row"><div class="rg-code-split"><span class="rg-code-split-co">NTB550</span><span class="rg-code-split-loc">#3381</span></div></div>
+                  <div class="variant-body">
                     <div class="rg-stop-name">NTB - 3381</div>
-                    <div class="rg-stop-addr">
-                      8300 NW 12th St<br>
-                      Doral, FL 33126
-                    </div>
-                    <div class="rg-stop-cap"><strong>C:</strong> 280 gal · <strong>TL:</strong> 0 gal <span class="pct">(0%)</span></div>
+                    <div class="rg-stop-addr">8300 NW 12th St<br>Doral, FL 33126</div>
+                    <div class="rg-stop-cap">C 280 gal · TL 0 gal <span class="pct success">(0%)</span></div>
                   </div>
-                  <svg class="rg-stop-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                  <div class="variant-divider"></div>
+                  <div class="rg-stop-tags variant-tags"><span class="rg-tag">OW</span><span class="rg-tag">UO</span><span class="rg-tag">OSF</span></div>
                 </div>
-                <div class="variant-divider" aria-hidden="true"></div>
-                <div class="rg-stop-tags variant-tags">
-                  <span class="rg-tag">OW</span>
-                  <span class="rg-tag">UO</span>
-                  <span class="rg-tag">OSF</span>
-                </div>
+                <svg class="rg-side-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
               </div>
 
-              <div class="rg-stop">
-                <div class="rg-stop-head">
-                  <div class="rg-stop-num">3</div>
-                  <div class="rg-stop-code">PEP334 #0078</div>
-                  <span class="rg-past-due"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Past Due</span>
-                </div>
-                <div class="rg-stop-body">
-                  <div class="rg-stop-info">
+              <div class="rg-stop variant-side">
+                <div class="rg-side-panel"><div class="rg-side-stop">STOP</div><div class="rg-side-num">03</div></div>
+                <div class="variant-content">
+                  <div class="rg-top-row"><div class="rg-code-split"><span class="rg-code-split-co">PEP334</span><span class="rg-code-split-loc">#0078</span></div></div>
+                  <div class="variant-body">
                     <div class="rg-stop-name">Pep Boys - 0078</div>
-                    <div class="rg-stop-addr">
-                      1401 W 49th St<br>
-                      Hialeah, FL 33012
-                    </div>
-                    <div class="rg-stop-cap"><strong>C:</strong> 310 gal · <strong>TL:</strong> 0 gal <span class="pct">(0%)</span></div>
+                    <div class="rg-stop-addr">1401 W 49th St<br>Hialeah, FL 33012</div>
+                    <div class="rg-stop-cap">C 310 gal · TL 0 gal <span class="pct success">(0%)</span></div>
                   </div>
-                  <svg class="rg-stop-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                  <div class="variant-divider"></div>
+                  <div class="rg-stop-tags variant-tags"><span class="rg-past-due"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Past Due</span><span class="rg-tag">UA</span><span class="rg-tag">OW</span></div>
                 </div>
-                <div class="variant-divider" aria-hidden="true"></div>
-                <div class="rg-stop-tags variant-tags">
-                  <span class="rg-tag">UA</span>
-                  <span class="rg-tag">OW</span>
-                </div>
+                <svg class="rg-side-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
               </div>
 
-              <div class="rg-stop">
-                <div class="rg-stop-head">
-                  <div class="rg-stop-num">4</div>
-                  <div class="rg-stop-code">VAL901 #2205</div>
-                </div>
-                <div class="rg-stop-body">
-                  <div class="rg-stop-info">
+              <div class="rg-stop variant-side">
+                <div class="rg-side-panel"><div class="rg-side-stop">STOP</div><div class="rg-side-num">04</div></div>
+                <div class="variant-content">
+                  <div class="rg-top-row"><div class="rg-code-split"><span class="rg-code-split-co">VAL901</span><span class="rg-code-split-loc">#2205</span></div></div>
+                  <div class="variant-body">
                     <div class="rg-stop-name">Valvoline - 2205</div>
-                    <div class="rg-stop-addr">
-                      6900 W Flagler St<br>
-                      Miami, FL 33144
-                    </div>
-                    <div class="rg-stop-cap"><strong>C:</strong> 360 gal · <strong>TL:</strong> 0 gal <span class="pct">(0%)</span></div>
+                    <div class="rg-stop-addr">6900 W Flagler St<br>Miami, FL 33144</div>
+                    <div class="rg-stop-cap">C 360 gal · TL 0 gal <span class="pct success">(0%)</span></div>
                   </div>
-                  <svg class="rg-stop-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                  <div class="variant-divider"></div>
+                  <div class="rg-stop-tags variant-tags"><span class="rg-tag">OSF</span><span class="rg-tag">UO</span></div>
                 </div>
-                <div class="variant-divider" aria-hidden="true"></div>
-                <div class="rg-stop-tags variant-tags">
-                  <span class="rg-tag">OSF</span>
-                  <span class="rg-tag">UO</span>
-                </div>
+                <svg class="rg-side-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
               </div>
 
             </div>
