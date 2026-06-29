@@ -62,13 +62,13 @@
     { id: 'stops', label: 'Stops', icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>' },
     { id: 'search', label: 'Search', icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>' },
     { id: 'transactions', label: 'Tasks', icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>' },
-    { id: 'checklist', label: 'Safety', icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>' },
+    { id: 'profile', label: 'Profile', icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>' },
   ];
 
   const activeTabMap = {
     routes: 'routes', datepicker: 'routes', create: 'routes',
     inbox: 'routes', message: 'routes', 'message-ack': 'routes',
-    checklist: 'checklist',
+    profile: 'profile', checklist: 'profile',
     stops: 'stops', 'stop-detail': 'stops',
   };
 
@@ -87,7 +87,7 @@
       `).join('');
       tabBar.querySelectorAll('.tab-item').forEach(t => {
         t.addEventListener('click', () => {
-          if (t.dataset.tab === 'checklist') goTo('checklist');
+          if (t.dataset.tab === 'profile') goTo('profile');
           else if (t.dataset.tab === 'routes') goTo('routes');
           else if (t.dataset.tab === 'stops') { currentRoute = null; goTo('stops'); }
           else showToast(`"${t.querySelector('span').textContent}" tab — demo only`);
@@ -179,7 +179,14 @@
 
   // Specific popup triggers
   document.getElementById('alert-btn')?.addEventListener('click', () => {
-    document.getElementById('popup-emergency').classList.add('show');
+    const sheet = document.getElementById('popup-emergency');
+    sheet.classList.add('show');
+    sheet.setAttribute('aria-hidden', 'false');
+  });
+  document.getElementById('logout-btn')?.addEventListener('click', () => {
+    const sheet = document.getElementById('sheet-logout');
+    sheet.classList.add('show');
+    sheet.setAttribute('aria-hidden', 'false');
   });
   document.getElementById('call-btn')?.addEventListener('click', () => {
     document.getElementById('popup-call').classList.add('show');
@@ -274,12 +281,29 @@
   }
 
   // ===== MAP PIN INTERACTIONS =====
+  // Category icons (shop = wrench, trailer = container, both = truck)
+  const CATEGORY = {
+    shop:    { label: 'Shop',           icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>' },
+    trailer: { label: 'Trailer',        icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="1"/><path d="M6 6v12M10 6v12M14 6v12M18 6v12"/></svg>' },
+    both:    { label: 'Shop + trailer', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 17h4V5H2v12h3"/><path d="M20 17h2v-3.34a4 4 0 0 0-1.17-2.83L19 9h-5"/><path d="M14 17h1"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>' },
+  };
+  const pinType = el => ['shop', 'trailer', 'both'].find(t => el.classList.contains(t));
+
   document.querySelectorAll('.map-pin').forEach(pin => {
+    const type = pinType(pin);
+    if (type) pin.innerHTML = `<span class="pin-ico">${CATEGORY[type].icon}</span>`;
     pin.addEventListener('click', () => {
-      // For demo, just bring up the loc-card briefly
-      const card = document.getElementById('loc-card');
-      if (card) {
-        card.style.transform = 'translateY(0)';
+      // Reflect the tapped pin's category in the location detail chip
+      const chip = document.querySelector('#sheet-location .type-chip');
+      if (chip && type) {
+        chip.className = `type-chip ${type}`;
+        chip.innerHTML = `${CATEGORY[type].icon}${CATEGORY[type].label}`;
+      }
+      // Open the location detail as a bottom sheet (same behavior as the calendar)
+      const sheet = document.getElementById('sheet-location');
+      if (sheet) {
+        sheet.classList.add('show');
+        sheet.setAttribute('aria-hidden', 'false');
       }
     });
   });
@@ -329,24 +353,28 @@
 
   const STATUS_LABEL  = { completed: 'Completed', current: 'In progress', pending: 'Pending' };
   const SERVICE_LABEL = { ow: 'OW', uo: 'UO', ua: 'UA', osf: 'OSF' };
-  const SERVICE_NAME  = { ow: 'Own Work', uo: 'Under Owner', ua: 'Under Agreement', osf: 'On-Site Fueling' };
+  const SERVICE_NAME  = { ow: 'Oily Water', uo: 'Used Oil', ua: 'Under Agreement', osf: 'On-Site Fueling' };
 
   function buildRouteList() {
     const list = document.getElementById('route-list');
     if (!list) return;
+    // The route that should be worked next = first one not fully completed.
+    const activeId = (ROUTES.find(r => r.stops.some(s => s.status !== 'completed')) || {}).id;
     list.innerHTML = ROUTES.map(route => {
       const done  = route.stops.filter(s => s.status === 'completed').length;
       const total = route.stops.length;
       const pct   = (done / total) * 100;
+      const isActive = route.id === activeId;
+      const accent = isActive ? 'var(--brand-500)' : 'var(--text-tertiary)';
       return `
-        <li class="route-card" data-route-id="${route.id}">
-          <div class="route-icon" style="--accent: ${route.color}">
+        <li class="route-card${isActive ? ' is-active' : ''}" data-route-id="${route.id}">
+          <div class="route-icon" style="--accent: ${accent}">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg>
           </div>
           <div class="route-meta">
             <h3>${route.name}</h3>
             <div class="route-progress">
-              <div class="progress-bar"><div class="progress-fill" style="background: ${route.color}; width: ${pct}%"></div></div>
+              <div class="progress-bar"><div class="progress-fill" style="background: ${accent}; width: ${pct}%"></div></div>
               <span class="progress-label"><strong>${done}</strong> / ${total} stops</span>
             </div>
           </div>
@@ -360,6 +388,12 @@
         goTo('stops');
       });
     });
+
+    // Header summary counts
+    const routesEl = document.getElementById('summary-routes');
+    const stopsEl  = document.getElementById('summary-stops');
+    if (routesEl) routesEl.textContent = ROUTES.length;
+    if (stopsEl)  stopsEl.textContent  = ROUTES.reduce((sum, r) => sum + r.stops.length, 0);
   }
 
   function updateStopsHeader() {
@@ -459,6 +493,7 @@
     if (!stop) return;
 
     document.getElementById('detail-title').textContent = `Stop #${stopIndex + 1}`;
+    document.getElementById('detail-header-right').innerHTML = stop.pastDue ? `<span class="past-due-chip">Past Due</span>` : '';
 
     const chips      = stop.services.map(s => `<span class="service-chip ${s}">${SERVICE_LABEL[s]}</span>`).join('');
     const pastDueBadge = stop.pastDue ? `<span class="past-due-chip">Past Due</span>` : '';
@@ -473,33 +508,47 @@
         <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
       </button>`).join('');
 
-    document.getElementById('stop-detail-content').innerHTML = `
+    document.getElementById('stop-detail-head').innerHTML = `
 
       <!-- Identity -->
       <div class="detail-identity">
-        <div class="stop-detail-codes">${stop.companyCode} · ${stop.locationCode}</div>
-        <h2 class="stop-detail-name">${stop.name}</h2>
-        <div class="stop-detail-tags">
-          <span class="stop-status-badge ${stop.status}">${STATUS_LABEL[stop.status]}</span>
-          ${pastDueBadge}${chips}
+        <div class="stop-detail-codes-row">
+          <div class="stop-detail-codes">${stop.companyCode} · ${stop.locationCode}</div>
+          <div class="stop-detail-pills">
+            <span class="stop-pill sc">SC</span>
+            <span class="stop-pill sp">SP</span>
+          </div>
         </div>
+        <h2 class="stop-detail-name">${stop.name}</h2>
       </div>
 
       <!-- 3 action buttons -->
       <div class="action-grid">
-        <button class="action-btn" id="btn-gps">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8" stroke-opacity="0.35"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>
-          <span>Capture GPS</span>
-        </button>
-        <button class="action-btn" id="btn-tanks">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M3 12h18M8 7V5a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/></svg>
-          <span>View Tanks</span>
-        </button>
         <button class="action-btn" id="btn-invoices">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l3-2 3 2 3-2 3 2 3-2V2z"/><path d="M9 7h6M9 11h6M9 15h4"/></svg>
           <span>Pay Invoices</span>
         </button>
+        <button class="action-btn" id="btn-gps">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8" stroke-opacity="0.35"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>
+          <span>Capture GPS</span>
+        </button>
+        <button class="action-btn" id="btn-start-txn">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          <span>Start TXN</span>
+        </button>
       </div>
+
+      <!-- Tabs: Info / Services -->
+      <div class="detail-tabs" role="tablist">
+        <button class="detail-tab active" data-tab="info" role="tab">Info</button>
+        <button class="detail-tab" data-tab="services" role="tab">Services</button>
+      </div>
+    `;
+
+    document.getElementById('stop-detail-content').innerHTML = `
+
+      <!-- Info pane -->
+      <div class="detail-pane" data-pane="info">
 
       <!-- Location Info -->
       <div class="detail-section">
@@ -531,10 +580,10 @@
         </div>
       </div>
 
-      <!-- Oil Tank -->
+      <!-- Tanks -->
       <div class="detail-section">
-        <div class="detail-section-title">Oil Tank</div>
-        <div class="tank-card" id="tank-card">
+        <div class="detail-section-title">Tanks</div>
+        <button class="tank-card" id="tank-card">
           <div class="tank-stats-row">
             <div class="tank-stat"><span class="ts-label">Capacity</span><span class="ts-value">1,000 gal</span></div>
             <div class="tank-stat"><span class="ts-label">C (Current)</span><span class="ts-value">${stop.gallonsC} gal</span></div>
@@ -555,8 +604,12 @@
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
               Not verified
             </span>
+            <span class="tank-details-link">
+              View details
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+            </span>
           </div>
-        </div>
+        </button>
       </div>
 
       <!-- Location Files -->
@@ -579,17 +632,19 @@
         </button>
       </div>
 
+      </div><!-- /Info pane -->
+
+      <!-- Services pane -->
+      <div class="detail-pane" data-pane="services" hidden>
+
       <!-- Scheduled Services -->
       <div class="detail-section">
         <div class="detail-section-title">Scheduled Services</div>
         <div class="service-contracts">${contracts}</div>
       </div>
 
-      <!-- Start TXN -->
-      <button class="start-txn-btn" id="btn-start-txn">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-        Start TXN
-      </button>
+      </div><!-- /Services pane -->
+
     `;
 
     // GPS
@@ -603,22 +658,6 @@
       btn.classList.add('captured');
       btn.querySelector('span').textContent = 'GPS Captured';
       showToast('GPS location captured');
-    };
-
-    // View Tanks
-    document.getElementById('btn-tanks').onclick = () => {
-      const btn    = document.getElementById('btn-tanks');
-      const badge  = document.getElementById('tank-status-badge');
-      const card   = document.getElementById('tank-card');
-      const on     = btn.classList.toggle('verified');
-      btn.querySelector('span').textContent = on ? 'Verified' : 'View Tanks';
-      if (badge) {
-        badge.className = `tank-status-badge ${on ? 'verified' : 'unverified'}`;
-        badge.innerHTML = on
-          ? `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg> Verified`
-          : `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> Not verified`;
-      }
-      card?.classList.toggle('verified', on);
     };
 
     // Pay Invoices
@@ -638,6 +677,9 @@
       if (stop.contact) document.getElementById('popup-call').classList.add('show');
     };
 
+    // Tanks card
+    document.getElementById('tank-card').onclick = () => showToast('Tank details — coming soon');
+
     // Attach
     document.getElementById('btn-attach').onclick = () => showToast('File picker — demo only');
 
@@ -648,6 +690,19 @@
     document.querySelectorAll('.service-contract-card').forEach(card => {
       card.onclick = () => showToast(`${SERVICE_NAME[card.dataset.service]} · Transactions coming soon`);
     });
+
+    // Info / Services tabs
+    document.querySelectorAll('.detail-tab').forEach(tab => {
+      tab.onclick = () => {
+        document.querySelectorAll('.detail-tab').forEach(t => t.classList.toggle('active', t === tab));
+        document.querySelectorAll('.detail-pane').forEach(p => {
+          p.hidden = p.dataset.pane !== tab.dataset.tab;
+        });
+      };
+    });
+
+    // Reset scroll position when opening a stop
+    document.querySelector('.screen[data-screen="stop-detail"] .screen-body').scrollTop = 0;
 
     // Start TXN
     document.getElementById('btn-start-txn').onclick = () => showToast('Starting transaction...');
