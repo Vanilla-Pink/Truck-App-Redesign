@@ -43,6 +43,7 @@
       const content = document.getElementById('stop-detail-content');
       if (!content || !content.innerHTML.trim()) renderStopDetail(0);
     }
+    if (screenId === 'tanks') renderTanksScreen();
     buildTabBar();
   }
 
@@ -69,7 +70,7 @@
     routes: 'routes', datepicker: 'routes', create: 'routes',
     inbox: 'routes', message: 'routes', 'message-ack': 'routes',
     profile: 'profile', checklist: 'profile',
-    stops: 'stops', 'stop-detail': 'stops',
+    stops: 'stops', 'stop-detail': 'stops', tanks: 'stops', 'tank-form': 'stops',
   };
 
   function buildTabBar() {
@@ -376,6 +377,39 @@
   ];
 
   let currentRoute = ROUTES[0];
+  let currentStopIndex = 0;
+  let editingTankId = null;
+  let nextTankId = 5;
+  let tankDraft = {};
+  let activeTankSetting = null;
+
+  const TANK_SETTING_OPTIONS = {
+    shape: { title: 'Tank shape', help: 'Choose the shape or standard tank model.', values: ['Custom', 'Cylindrical', 'Rectangular', 'Square', 'Drum', 'Drum55', 'Tote', 'Tote 275', 'Tote 330', 'Oblong 275', 'Oblong 330'] },
+    fitting: { title: 'Fitting size', help: 'Choose the connection size used by this tank.', values: ['1.0 in', '1.5 in', '2.0 in', '3.0 in', '4.0 in'] },
+    orientation: { title: 'Orientation', help: 'Choose how the tank is installed.', values: ['Horizontal', 'Vertical'] },
+    ground: { title: 'Ground level', help: 'Choose whether the tank is installed above or below ground.', values: ['Above ground', 'Underground'] },
+    location: { title: 'Tank location', help: 'Choose the tank position at this location.', values: ['Inside', 'Outside', 'Service bay', 'Behind service bay', 'North wall', 'South wall'] }
+  };
+
+  const TANK_SIZE_FIELDS = {
+    Custom: ['Width', 'Length', 'Height'],
+    Cylindrical: ['Diameter', 'Length'],
+    Rectangular: ['Width', 'Length', 'Height'],
+    Square: ['Side', 'Height'],
+    Drum: ['Diameter', 'Height']
+  };
+
+  function tanksForStop(stop) {
+    if (!stop.tanks) {
+      stop.tanks = [
+        { id: 1, code: 'T0008CB6', name: 'Used Oil Tank #1', capacity: 1000, level: stop.gallonsC, shape: 'Custom', dimensions: '0 (W) × 0 (L) × 0 (H)', orientation: 'Horizontal', location: 'Outside', underground: 'Yes', fitting: '2.0 in', labeled: 'No', temperature: '0 °C', createdBy: 'Charles Hall Jr. (3001)', notes: '—', sensor: null, verified: false },
+        { id: 2, code: 'T0014FD2', name: 'Used Oil Tank #2', capacity: 750, level: 485, shape: 'Cylindrical', dimensions: '48 (W) × 96 (L) × 48 (H)', orientation: 'Horizontal', location: 'Behind service bay', underground: 'No', fitting: '2.0 in', labeled: 'Yes', temperature: '22 °C', createdBy: 'Marcus Lee (4821)', notes: 'Access from rear gate.', sensor: 'SN-2048', verified: true },
+        { id: 3, code: 'T0021AE9', name: 'Used Oil Tank #3', capacity: 500, level: 210, shape: 'Rectangular', dimensions: '42 (W) × 72 (L) × 46 (H)', orientation: 'Vertical', location: 'Service bay 2', underground: 'No', fitting: '1.5 in', labeled: 'Yes', temperature: '19 °C', createdBy: 'Ana Perez (2140)', notes: 'Inspect fitting before pickup.', sensor: null, verified: false },
+        { id: 4, code: 'T0036BC4', name: 'Used Oil Tank #4', capacity: 600, level: 330, shape: 'Cylindrical', dimensions: '46 (W) × 84 (L) × 46 (H)', orientation: 'Horizontal', location: 'North wall', underground: 'No', fitting: '2.0 in', labeled: 'Yes', temperature: '21 °C', createdBy: 'Jose Ramirez (3302)', notes: 'No access restrictions.', sensor: 'SN-4381', verified: true }
+      ];
+    }
+    return stop.tanks;
+  }
 
   const STATUS_LABEL  = { completed: 'Completed', current: 'In progress', pending: 'Pending' };
   const SERVICE_LABEL = { ow: 'OW', uo: 'UO', ua: 'UA', osf: 'OSF' };
@@ -517,6 +551,7 @@
   function renderStopDetail(stopIndex) {
     const stop = currentRoute.stops[stopIndex];
     if (!stop) return;
+    currentStopIndex = stopIndex;
 
     document.getElementById('detail-title').textContent = `Stop #${stopIndex + 1}`;
     document.getElementById('detail-header-right').innerHTML = stop.pastDue ? `<span class="past-due-chip">Past Due</span>` : '';
@@ -704,7 +739,7 @@
     };
 
     // Tanks card
-    document.getElementById('tank-card').onclick = () => showToast('Tank details — coming soon');
+    document.getElementById('tank-card').onclick = () => goTo('tanks');
 
     // Attach
     document.getElementById('btn-attach').onclick = () => showToast('File picker — demo only');
@@ -733,6 +768,275 @@
     // Start TXN
     document.getElementById('btn-start-txn').onclick = () => showToast('Starting transaction...');
   }
+
+  function renderTanksScreen() {
+    const stop = currentRoute?.stops[currentStopIndex] || ROUTES[0].stops[0];
+    if (!stop) return;
+    const tanks = tanksForStop(stop);
+    const totalCapacity = tanks.reduce((sum, tank) => sum + tank.capacity, 0);
+    const totalLevel = tanks.reduce((sum, tank) => sum + tank.level, 0);
+    const verifiedCount = tanks.filter(tank => tank.verified).length;
+    const utilization = totalCapacity ? Math.round(totalLevel / totalCapacity * 100) : 0;
+
+    document.getElementById('tanks-location-summary').innerHTML = `
+      <section class="tank-location-card">
+        <div class="tank-location-top"><div><span>${stop.companyCode} · ${stop.locationCode}</span><h2>${stop.name}</h2></div></div>
+        <div class="tank-summary-grid">
+          <div><strong>${tanks.length}</strong><span>Tanks</span></div>
+          <div><strong>${totalCapacity.toLocaleString()}</strong><span>Total gal</span></div>
+          <div><strong>${utilization}%</strong><span>Current</span></div>
+          <div><strong>${verifiedCount}/${tanks.length}</strong><span>Verified</span></div>
+        </div>
+        <button class="location-verify-btn ${verifiedCount === tanks.length ? 'verified' : ''}" id="location-verify-btn">
+          <span><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L20 7"/></svg>Location tanks verified</span>
+          <span class="location-switch"><i></i></span>
+        </button>
+      </section>
+      <button class="tank-messages-btn" id="tank-messages-btn"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/></svg><span>View location messages</span><span class="message-count">2</span></button>`;
+    document.getElementById('tank-count').textContent = `${tanks.length} ${tanks.length === 1 ? 'tank' : 'tanks'}`;
+    document.getElementById('tank-list-full').innerHTML = tanks.map((tank, tankIndex) => {
+      const pct = Math.min(100, Math.round(tank.level / tank.capacity * 100));
+      if (tankIndex === 1) {
+        return `<article class="tank-detail-card tank-detail-card-alt ${tank.verified ? 'is-verified' : ''}" data-tank-id="${tank.id}">
+          <div class="tank-alt-header">
+            <div><span class="tank-alt-kicker">USED OIL · ${tank.code}</span><h3>${tank.name}</h3></div>
+            <button class="tank-alt-verify-switch ${tank.verified ? 'verified' : ''}" aria-pressed="${tank.verified}">
+              <span class="tank-switch"><i></i></span><span class="tank-switch-label">${tank.verified ? 'Verified' : 'Verify'}</span>
+            </button>
+          </div>
+          <dl class="tank-alt-fields">
+            <div><dt>Capacity</dt><dd>${tank.capacity.toLocaleString()} gal</dd></div>
+            <div class="span-two"><dt>Current level</dt><dd>${tank.level.toLocaleString()} gal · ${pct}%</dd></div>
+            <div><dt>Shape</dt><dd>${tank.shape}</dd></div>
+            <div class="span-two"><dt>Dimensions (in)</dt><dd>${tank.dimensions}</dd></div>
+            <div><dt>Orientation</dt><dd>${tank.orientation}</dd></div>
+            <div><dt>Location</dt><dd>${tank.location}</dd></div>
+            <div><dt>Underground?</dt><dd>${tank.underground}</dd></div>
+            <div><dt>Fitting</dt><dd>${tank.fitting}</dd></div>
+            <div><dt>Labeled?</dt><dd>${tank.labeled}</dd></div>
+            <div><dt>Temperature</dt><dd>${tank.temperature}</dd></div>
+            <div class="span-all"><dt>Created by</dt><dd>${tank.createdBy}</dd></div>
+            <div class="span-all"><dt>Notes</dt><dd>${tank.notes}</dd></div>
+          </dl>
+          <div class="tank-alt-actions">
+            <button class="tank-sensor-btn ${tank.sensor ? 'assigned' : ''}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12.55a11 11 0 0 1 14.08 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>${tank.sensor || 'Assign sensor'}</button>
+            <button class="tank-edit-btn tank-alt-edit" aria-label="Edit ${tank.name}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>Edit tank</button>
+          </div>
+        </article>`;
+      }
+      if (tankIndex === 2) {
+        const fields = [
+          ['Shape', tank.shape], ['Dimensions (in)', tank.dimensions],
+          ['Orientation', tank.orientation], ['Location', tank.location],
+          ['Underground?', tank.underground], ['Fitting', tank.fitting],
+          ['Labeled?', tank.labeled], ['Temperature', tank.temperature],
+          ['Created by', tank.createdBy], ['Notes', tank.notes]
+        ];
+        return `<article class="tank-detail-card tank-detail-card-v3 ${tank.verified ? 'is-verified' : ''}" data-tank-id="${tank.id}">
+          <div class="tank-v3-head">
+            <div class="tank-v3-number">#3</div>
+            <div class="tank-v3-title"><span>${tank.code}</span><h3>${tank.name}</h3></div>
+            <button class="tank-edit-btn" aria-label="Edit ${tank.name}"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>
+          </div>
+          <div class="tank-v3-metrics">
+            <div><span>Capacity</span><strong>${tank.capacity.toLocaleString()}</strong><small>gal</small></div>
+            <div><span>Level</span><strong>${tank.level.toLocaleString()}</strong><small>gal · ${pct}%</small></div>
+          </div>
+          <div class="tank-v3-fields">${fields.map(([label, value]) => `<div><span>${label}</span><strong>${value}</strong></div>`).join('')}</div>
+          <div class="tank-v3-footer">
+            <button class="tank-sensor-btn ${tank.sensor ? 'assigned' : ''}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12.55a11 11 0 0 1 14.08 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>${tank.sensor || 'Assign sensor'}</button>
+            <button class="tank-verified-btn ${tank.verified ? 'verified' : ''}" aria-pressed="${tank.verified}">${tank.verified ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l5 5L20 7"/></svg> Verified' : '<span class="verify-ring"></span> Verify'}</button>
+          </div>
+        </article>`;
+      }
+      if (tankIndex === 3) {
+        const fields = [
+          ['Shape', tank.shape], ['Dimensions', `${tank.dimensions} in`],
+          ['Orientation', tank.orientation], ['Location', tank.location],
+          ['Underground', tank.underground], ['Fitting', tank.fitting],
+          ['Labeled', tank.labeled], ['Temperature', tank.temperature],
+          ['Created by', tank.createdBy], ['Notes', tank.notes]
+        ];
+        return `<article class="tank-detail-card tank-detail-card-minimal ${tank.verified ? 'is-verified' : ''}" data-tank-id="${tank.id}">
+          <div class="tank-min-head">
+            <div><span>${tank.code}</span><h3>${tank.name}</h3></div>
+            <button class="tank-edit-btn" aria-label="Edit ${tank.name}"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>
+          </div>
+          <div class="tank-min-levels">
+            <div><span>Capacity</span><strong>${tank.capacity.toLocaleString()} <small>gal</small></strong></div>
+            <div><span>Current level</span><strong>${tank.level.toLocaleString()} <small>gal · ${pct}%</small></strong></div>
+          </div>
+          <dl class="tank-min-fields">${fields.map(([label, value]) => `<div><dt>${label}</dt><dd>${value}</dd></div>`).join('')}</dl>
+          <div class="tank-min-actions">
+            <button class="tank-sensor-btn ${tank.sensor ? 'assigned' : ''}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12.55a11 11 0 0 1 14.08 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>${tank.sensor || 'Assign sensor'}</button>
+            <button class="tank-verified-btn ${tank.verified ? 'verified' : ''}" aria-pressed="${tank.verified}">${tank.verified ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l5 5L20 7"/></svg> Verified' : '<span class="verify-ring"></span> Verify'}</button>
+          </div>
+        </article>`;
+      }
+      return `<article class="tank-detail-card ${tank.verified ? 'is-verified' : ''}" data-tank-id="${tank.id}">
+        <div class="tank-card-heading"><div class="tank-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 7h14v10H5z"/><path d="M8 7V4h8v3M8 17v3M16 17v3"/></svg></div><div><span>${tank.code} · USED OIL</span><h3>${tank.name}</h3></div><button class="tank-edit-btn" aria-label="Edit ${tank.name}"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button></div>
+        <div class="tank-measure-row"><div><span>Current level</span><strong>${tank.level.toLocaleString()} <small>gal</small></strong></div><div><span>Capacity</span><strong>${tank.capacity.toLocaleString()} <small>gal</small></strong></div></div>
+        <div class="tank-level-track"><div style="width:${pct}%"></div></div>
+        <div class="tank-level-meta"><span>${pct}% full</span></div>
+        <dl class="tank-spec-grid">
+          <div><dt>Shape</dt><dd>${tank.shape}</dd></div><div><dt>Dimensions (in)</dt><dd>${tank.dimensions}</dd></div>
+          <div><dt>Orientation</dt><dd>${tank.orientation}</dd></div><div><dt>Location</dt><dd>${tank.location}</dd></div>
+          <div><dt>Underground?</dt><dd>${tank.underground}</dd></div><div><dt>Fitting</dt><dd>${tank.fitting}</dd></div>
+          <div><dt>Labeled?</dt><dd>${tank.labeled}</dd></div><div><dt>Temperature</dt><dd>${tank.temperature}</dd></div>
+          <div class="wide"><dt>Created by</dt><dd>${tank.createdBy}</dd></div><div class="wide"><dt>Notes</dt><dd>${tank.notes}</dd></div>
+        </dl>
+        <div class="tank-primary-actions">
+          <button class="tank-sensor-btn ${tank.sensor ? 'assigned' : ''}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12.55a11 11 0 0 1 14.08 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>${tank.sensor ? `Sensor ${tank.sensor}` : 'Assign sensor'}</button>
+          <button class="tank-verified-btn ${tank.verified ? 'verified' : ''}" aria-pressed="${tank.verified}">${tank.verified ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l5 5L20 7"/></svg> Verified' : '<span class="verify-ring"></span> Verify'}</button>
+        </div>
+      </article>`;
+    }).join('');
+
+    document.getElementById('location-verify-btn').onclick = () => {
+      const markVerified = !tanks.every(tank => tank.verified);
+      tanks.forEach(tank => { tank.verified = markVerified; });
+      renderTanksScreen();
+      showToast(markVerified ? 'All location tanks verified' : 'Location verification removed');
+    };
+    document.getElementById('tank-messages-btn').onclick = () => goTo('inbox');
+    document.querySelectorAll('.tank-edit-btn').forEach(btn => btn.onclick = () => openTankForm(Number(btn.closest('[data-tank-id]').dataset.tankId)));
+    document.querySelectorAll('.tank-sensor-btn').forEach(btn => btn.onclick = () => {
+      const tank = tanks.find(item => item.id === Number(btn.closest('[data-tank-id]').dataset.tankId));
+      tank.sensor = tank.sensor ? null : `SN-${Math.floor(1000 + Math.random() * 8999)}`;
+      renderTanksScreen();
+      showToast(tank.sensor ? 'Sensor assigned' : 'Sensor unassigned');
+    });
+    document.querySelectorAll('.tank-verified-btn, .tank-alt-verify-switch').forEach(btn => btn.onclick = () => {
+      const tank = tanks.find(item => item.id === Number(btn.closest('[data-tank-id]').dataset.tankId));
+      tank.verified = !tank.verified;
+      renderTanksScreen();
+      showToast(tank.verified ? `${tank.name} verified` : 'Verification removed');
+    });
+  }
+
+  function openTankForm(tankId = null) {
+    const stop = currentRoute?.stops[currentStopIndex] || ROUTES[0].stops[0];
+    const tank = tankId === null ? null : tanksForStop(stop).find(item => item.id === tankId);
+    editingTankId = tankId;
+    tankDraft = {
+      shape: tank?.shape || 'Custom',
+      dimensions: tank?.dimensions || 'Not specified',
+      fitting: tank?.fitting || 'Not specified',
+      orientation: tank?.orientation || 'Not specified',
+      ground: tank?.underground === 'Yes' ? 'Underground' : 'Above ground',
+      location: tank?.location || 'Not specified',
+      labeled: tank?.labeled === 'Yes',
+      notes: tank?.notes === '—' ? '' : (tank?.notes || '')
+    };
+    document.getElementById('tank-form-title').textContent = tank ? 'Edit tank' : 'Add tank';
+    document.getElementById('tank-form-heading').textContent = tank ? tank.name : 'New used oil tank';
+    document.getElementById('tank-name-input').value = tank?.name || '';
+    document.getElementById('tank-capacity-input').value = tank?.capacity || '';
+    syncTankFormSettings();
+    goTo('tank-form');
+  }
+
+  function syncTankFormSettings() {
+    ['shape', 'dimensions', 'fitting', 'orientation', 'ground', 'location'].forEach(key => {
+      document.getElementById(`tank-setting-${key}`).textContent = tankDraft[key];
+    });
+    document.getElementById('tank-setting-notes').textContent = tankDraft.notes || 'No notes';
+    const labeled = document.getElementById('tank-labeled-switch');
+    labeled.classList.toggle('active', tankDraft.labeled);
+    labeled.setAttribute('aria-pressed', tankDraft.labeled);
+  }
+
+  function openTankOptions(setting) {
+    const config = TANK_SETTING_OPTIONS[setting];
+    if (!config) return;
+    activeTankSetting = setting;
+    document.getElementById('tank-options-title').textContent = config.title;
+    document.getElementById('tank-options-help').textContent = config.help;
+    document.getElementById('tank-option-list').innerHTML = config.values.map(value => `
+      <button class="tank-option-row ${tankDraft[setting] === value ? 'selected' : ''}" data-value="${value}">
+        <span>${value}</span><span class="tank-option-check"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l5 5L20 7"/></svg></span>
+      </button>`).join('');
+    document.querySelectorAll('.tank-option-row').forEach(row => row.onclick = () => {
+      tankDraft[setting] = row.dataset.value;
+      if (setting === 'shape') tankDraft.dimensions = 'Not specified';
+      syncTankFormSettings();
+      goTo('tank-form');
+    });
+    goTo('tank-options');
+  }
+
+  function openTankSize() {
+    document.getElementById('tank-size-shape').textContent = tankDraft.shape;
+    const labels = TANK_SIZE_FIELDS[tankDraft.shape] || [];
+    const currentValues = tankDraft.dimensions.match(/\d+(?:\.\d+)?/g) || [];
+    document.getElementById('tank-size-fields').innerHTML = labels.length
+      ? labels.map((label, index) => `<label class="field"><span class="field-label">${label}</span><div class="field-input tank-number-input"><input type="number" min="0" inputmode="decimal" data-size-field="${label}" value="${currentValues[index] || ''}" placeholder="0"><span>in</span></div></label>`).join('')
+      : `<div class="tank-standard-size"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 7h14v10H5z"/><path d="M8 7V4h8v3M8 17v3M16 17v3"/></svg><div><strong>Standard dimensions</strong><span>${tankDraft.shape} uses the predefined dimensions for this model. No manual measurements are required.</span></div></div>`;
+    goTo('tank-size');
+  }
+
+  function saveTank() {
+    const stop = currentRoute?.stops[currentStopIndex] || ROUTES[0].stops[0];
+    const tanks = tanksForStop(stop);
+    const name = document.getElementById('tank-name-input').value.trim();
+    const capacity = Number(document.getElementById('tank-capacity-input').value);
+    if (!name || capacity <= 0) {
+      showToast('Check the tank name and gallon values');
+      return;
+    }
+    const changes = { name, capacity, shape: tankDraft.shape, dimensions: tankDraft.dimensions, orientation: tankDraft.orientation, location: tankDraft.location, underground: tankDraft.ground === 'Underground' ? 'Yes' : 'No', fitting: tankDraft.fitting, labeled: tankDraft.labeled ? 'Yes' : 'No', notes: tankDraft.notes || '—' };
+    if (editingTankId === null) tanks.push({ id: nextTankId++, code: `T${String(Math.floor(Math.random() * 0xffffff)).toUpperCase().padStart(7, '0').slice(0, 7)}`, level: 0, temperature: 'Not recorded', createdBy: 'Marcus Lee (4821)', sensor: null, verified: false, ...changes });
+    else Object.assign(tanks.find(item => item.id === editingTankId), changes);
+    goTo('tanks');
+    showToast(editingTankId === null ? 'Tank added' : 'Tank updated');
+  }
+
+  document.getElementById('tank-add-btn')?.addEventListener('click', () => openTankForm());
+  document.getElementById('tank-save-btn')?.addEventListener('click', saveTank);
+  document.getElementById('tank-save-cta')?.addEventListener('click', saveTank);
+  document.querySelectorAll('[data-tank-setting]').forEach(row => row.addEventListener('click', () => {
+    const setting = row.dataset.tankSetting;
+    if (setting === 'dimensions') openTankSize();
+    else if (setting === 'notes') {
+      const stop = currentRoute?.stops[currentStopIndex] || ROUTES[0].stops[0];
+      const tank = tanksForStop(stop).find(item => item.id === editingTankId);
+      document.getElementById('tank-note-input').value = tankDraft.notes;
+      document.getElementById('tank-note-context-name').textContent = tank?.name || document.getElementById('tank-name-input').value || 'New used oil tank';
+      document.getElementById('tank-note-context-code').textContent = tank?.code || 'New tank';
+      updateTankNoteCount();
+      goTo('tank-note');
+    } else openTankOptions(setting);
+  }));
+  document.getElementById('tank-options-back')?.addEventListener('click', () => goTo('tank-form'));
+  document.getElementById('tank-labeled-switch')?.addEventListener('click', () => {
+    tankDraft.labeled = !tankDraft.labeled;
+    syncTankFormSettings();
+  });
+  document.getElementById('tank-size-done')?.addEventListener('click', () => {
+    const inputs = [...document.querySelectorAll('[data-size-field]')];
+    tankDraft.dimensions = inputs.length
+      ? inputs.map(input => `${input.value || 0} (${input.dataset.sizeField.charAt(0)})`).join(' × ')
+      : `Standard · ${tankDraft.shape}`;
+    syncTankFormSettings();
+    goTo('tank-form');
+  });
+  document.getElementById('tank-note-done')?.addEventListener('click', () => {
+    tankDraft.notes = document.getElementById('tank-note-input').value.trim();
+    syncTankFormSettings();
+    goTo('tank-form');
+  });
+  function updateTankNoteCount() {
+    const input = document.getElementById('tank-note-input');
+    const count = document.getElementById('tank-note-count');
+    if (input && count) count.textContent = input.value.length;
+  }
+  document.getElementById('tank-note-input')?.addEventListener('input', updateTankNoteCount);
+  document.getElementById('tank-note-clear')?.addEventListener('click', () => {
+    const input = document.getElementById('tank-note-input');
+    input.value = '';
+    input.focus();
+    updateTankNoteCount();
+  });
 
   // ===== DRAG & DROP =====
   function initDragDrop() {

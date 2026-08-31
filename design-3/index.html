@@ -528,6 +528,91 @@
           <nav class="tab-bar"></nav>
         </section>
 
+        <!-- ===== SCREEN: LOCATION TANKS ===== -->
+        <section class="screen no-tabs" data-screen="tanks">
+          <div class="app-header tanks-header">
+            <div class="header-row">
+              <button class="header-icon ghost" aria-label="Back to location" data-go="stop-detail">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+              </button>
+              <h2 class="header-title">Tanks</h2>
+              <button class="header-icon tank-add-header" id="tank-add-btn" aria-label="Add tank">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+                <span>Add</span>
+              </button>
+            </div>
+          </div>
+          <div class="screen-body tanks-screen-body">
+            <div id="tanks-location-summary"></div>
+            <div class="tank-list-heading">
+              <div><span class="eyebrow">Storage</span><h3>Used Oil Tank list</h3></div>
+              <span class="tank-count" id="tank-count">0 tanks</span>
+            </div>
+            <div class="tank-list-full" id="tank-list-full"></div>
+          </div>
+        </section>
+
+        <!-- ===== SCREEN: ADD / EDIT TANK ===== -->
+        <section class="screen no-tabs" data-screen="tank-form">
+          <div class="app-header">
+            <div class="header-row">
+              <button class="header-icon ghost" aria-label="Back to tanks" data-go="tanks">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+              </button>
+              <h2 class="header-title" id="tank-form-title">Add tank</h2>
+              <button class="text-action" id="tank-save-btn">Save</button>
+            </div>
+          </div>
+          <div class="screen-body tank-form-body">
+            <div class="tank-form-intro">
+              <span class="tank-form-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7h14v10H5z"/><path d="M8 7V4h8v3M8 17v3M16 17v3"/></svg></span>
+              <div><h3 id="tank-form-heading">New used oil tank</h3><p>Keep capacity and current level up to date.</p></div>
+            </div>
+            <div class="tank-form-card">
+              <label class="field"><span class="field-label">Tank name</span><div class="field-input"><input id="tank-name-input" type="text" placeholder="e.g. Used Oil Tank #3"></div></label>
+              <label class="field"><span class="field-label">Total gallons</span><div class="field-input tank-number-input"><input id="tank-capacity-input" type="number" min="1" inputmode="numeric" placeholder="1000"><span>gal</span></div></label>
+            </div>
+            <div class="tank-edit-section-label">Tank configuration</div>
+            <div class="tank-settings-list">
+              <button class="tank-setting-row" data-tank-setting="shape"><span><small>Shape</small><strong id="tank-setting-shape">Custom</strong></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></button>
+              <button class="tank-setting-row" data-tank-setting="dimensions"><span><small>Dimensions</small><strong id="tank-setting-dimensions">Not specified</strong></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></button>
+              <button class="tank-setting-row" data-tank-setting="fitting"><span><small>Fitting size</small><strong id="tank-setting-fitting">Not specified</strong></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></button>
+              <button class="tank-setting-row" data-tank-setting="orientation"><span><small>Orientation</small><strong id="tank-setting-orientation">Not specified</strong></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></button>
+              <button class="tank-setting-row" data-tank-setting="ground"><span><small>Ground level</small><strong id="tank-setting-ground">Above ground</strong></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></button>
+              <button class="tank-setting-row" data-tank-setting="location"><span><small>Location</small><strong id="tank-setting-location">Not specified</strong></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></button>
+              <button class="tank-setting-row" data-tank-setting="notes"><span><small>Notes</small><strong id="tank-setting-notes">No notes</strong></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></button>
+              <div class="tank-setting-row static"><span><small>Labeled</small><strong>Tank has a visible label</strong></span><button class="tank-labeled-switch" id="tank-labeled-switch" type="button" aria-pressed="false"><i></i></button></div>
+            </div>
+            <button class="big-cta" id="tank-save-cta"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>Save tank</button>
+          </div>
+        </section>
+
+        <!-- ===== SCREEN: TANK OPTION PICKER ===== -->
+        <section class="screen no-tabs" data-screen="tank-options">
+          <div class="app-header"><div class="header-row"><button class="header-icon ghost" id="tank-options-back" aria-label="Back"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><h2 class="header-title" id="tank-options-title">Select option</h2><div style="width:48px"></div></div></div>
+          <div class="screen-body"><p class="tank-options-help" id="tank-options-help"></p><div class="tank-option-list" id="tank-option-list"></div></div>
+        </section>
+
+        <!-- ===== SCREEN: TANK SIZE ===== -->
+        <section class="screen no-tabs" data-screen="tank-size">
+          <div class="app-header"><div class="header-row"><button class="header-icon ghost" data-go="tank-form" aria-label="Back"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><h2 class="header-title">Tank size</h2><button class="text-action" id="tank-size-done">Done</button></div></div>
+          <div class="screen-body"><div class="tank-size-shape"><span>Selected shape</span><strong id="tank-size-shape">Custom</strong></div><p class="tank-options-help">Enter the physical dimensions in inches.</p><div class="tank-size-fields" id="tank-size-fields"></div></div>
+        </section>
+
+        <!-- ===== SCREEN: TANK NOTE ===== -->
+        <section class="screen no-tabs" data-screen="tank-note">
+          <div class="app-header"><div class="header-row"><button class="header-icon ghost" data-go="tank-form" aria-label="Back"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><h2 class="header-title">Tank notes</h2><button class="text-action" id="tank-note-done">Done</button></div></div>
+          <div class="screen-body tank-note-body">
+            <div class="tank-note-context"><span class="tank-note-context-icon"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 7h14v10H5z"/><path d="M8 7V4h8v3M8 17v3M16 17v3"/></svg></span><div><small>Adding a note to</small><strong id="tank-note-context-name">Used Oil Tank</strong><span id="tank-note-context-code">Tank</span></div></div>
+            <div class="tank-note-editor">
+              <div class="tank-note-editor-head"><label for="tank-note-input">Note</label><button type="button" id="tank-note-clear">Clear</button></div>
+              <textarea class="tank-note-input" id="tank-note-input" maxlength="500" placeholder="What should the next driver know?"></textarea>
+              <div class="tank-note-meta"><span>Keep it short and operational.</span><strong><span id="tank-note-count">0</span>/500</strong></div>
+            </div>
+            <div class="tank-note-tip"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg><p>Include access restrictions, visible damage, fitting condition or anything that affects service.</p></div>
+          </div>
+        </section>
+
 
         <!-- ===== SCREEN: SECURITY CHECKLIST ===== -->
         <section class="screen" data-screen="checklist">
@@ -1020,6 +1105,10 @@
         <li><button data-go="stop-detail">
           <span class="nav-num">10</span>
           <div><strong>Stop detail</strong><span>Individual stop view</span></div>
+        </button></li>
+        <li><button data-go="tanks">
+          <span class="nav-num">11</span>
+          <div><strong>Tanks</strong><span>Location tank management</span></div>
         </button></li>
       </ul>
 
