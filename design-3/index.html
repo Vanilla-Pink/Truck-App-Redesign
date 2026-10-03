@@ -528,6 +528,742 @@
           <nav class="tab-bar"></nav>
         </section>
 
+        <!-- ===== SCREEN: TRANSACTION · SERVICES ===== -->
+        <section class="screen no-tabs transaction-screen" data-screen="transaction-services">
+          <header class="txn-header">
+            <div class="txn-header-row">
+              <button class="txn-exit-btn" id="txn-exit-btn" aria-label="Save and exit transaction">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                Exit
+              </button>
+              <div class="txn-header-title">
+                <span>Transaction</span>
+                <strong id="txn-stop-number">Stop #1</strong>
+              </div>
+              <span class="txn-header-spacer" aria-hidden="true"></span>
+            </div>
+
+            <button class="txn-progress-icons" id="txn-progress-icons" aria-label="Transaction progress, step 1 of 5, Services">
+              <span class="txn-icon-steps" aria-hidden="true">
+                <span class="active">
+                  <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5h10v16H5V5h2"/><path d="M9 3h6v4H9zM8 13l2 2 5-5"/></svg></i>
+                  <small>Services</small>
+                </span>
+                <span>
+                  <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18M7 15h4"/></svg></i>
+                  <small>Spot Pay</small>
+                </span>
+                <span>
+                  <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4.5l5 5L8 21H3v-5zM12 7l5 5"/></svg></i>
+                  <small>Driver</small>
+                </span>
+                <span>
+                  <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4l5 5L8 21H3v-5zM13 6l5 5"/></svg></i>
+                  <small>Customer</small>
+                </span>
+                <span>
+                  <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg></i>
+                  <small>Review</small>
+                </span>
+              </span>
+            </button>
+          </header>
+
+          <div class="screen-body txn-body">
+            <div class="txn-location-card" id="txn-location-card"></div>
+
+            <section class="txn-section txn-details-section">
+              <div class="txn-section-heading"><div><span class="eyebrow">Transaction details</span><h2>Visit information</h2></div></div>
+              <label class="txn-toggle-row">
+                <span><strong>Physically at location?</strong><small>Confirm the truck is at this stop</small></span>
+                <input type="checkbox" id="txn-at-location" checked>
+                <span class="txn-switch" aria-hidden="true"><i></i></span>
+              </label>
+              <label class="txn-field">
+                <span>PO number <small>Optional</small></span>
+                <input type="text" id="txn-po-number" placeholder="Enter PO number">
+              </label>
+            </section>
+
+            <section class="txn-section">
+              <div class="txn-section-heading">
+                <div>
+                  <span class="eyebrow">Scheduled work</span>
+                  <div class="txn-section-title-row">
+                    <h2>Services</h2>
+                    <span class="txn-section-count" id="txn-service-count">(0 services)</span>
+                  </div>
+                </div>
+                <button class="txn-add-service-top" id="txn-add-service-top" aria-label="Add another service">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+                </button>
+              </div>
+              <div class="txn-service-list" id="txn-service-list"></div>
+              <button class="txn-add-service" id="txn-add-service">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+                <span>Add another service</span>
+              </button>
+            </section>
+          </div>
+
+          <footer class="txn-action-bar">
+            <button class="txn-back" disabled>Back</button>
+            <button class="txn-next" id="txn-next-btn">Next <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+          </footer>
+        </section>
+
+        <!-- ===== SCREEN: TRANSACTION · SPOT PAY ===== -->
+        <section class="screen no-tabs transaction-screen" data-screen="transaction-payment">
+          <header class="txn-header">
+            <div class="txn-header-row">
+              <button class="txn-exit-btn" id="spot-pay-exit" aria-label="Save and exit transaction">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                Exit
+              </button>
+              <div class="txn-header-title">
+                <span>Transaction</span>
+                <strong id="spot-pay-stop-number">Stop #1</strong>
+              </div>
+              <span class="txn-header-spacer" aria-hidden="true"></span>
+            </div>
+
+            <button class="txn-progress-icons" id="spot-pay-progress" aria-label="Transaction progress, step 2 of 5, Spot Pay">
+              <span class="txn-icon-steps" aria-hidden="true">
+                <span class="completed">
+                  <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5h10v16H5V5h2"/><path d="M9 3h6v4H9zM8 13l2 2 5-5"/></svg></i>
+                  <small>Services</small>
+                </span>
+                <span class="active">
+                  <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18M7 15h4"/></svg></i>
+                  <small>Spot Pay</small>
+                </span>
+                <span>
+                  <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4.5l5 5L8 21H3v-5zM12 7l5 5"/></svg></i>
+                  <small>Driver</small>
+                </span>
+                <span>
+                  <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4l5 5L8 21H3v-5zM13 6l5 5"/></svg></i>
+                  <small>Customer</small>
+                </span>
+                <span>
+                  <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg></i>
+                  <small>Review</small>
+                </span>
+              </span>
+            </button>
+          </header>
+
+          <div class="screen-body txn-body spot-pay-body">
+            <div class="txn-location-card" id="spot-pay-location-card"></div>
+            <div class="spot-transaction-id" aria-label="Transaction number">
+              <span>
+                <small>Transaction number</small>
+                <strong id="spot-transaction-number"></strong>
+              </span>
+              <button id="spot-copy-transaction" type="button">Copy ID</button>
+            </div>
+            <section class="txn-section">
+              <div class="txn-section-heading"><div><span class="eyebrow">Payment</span><h2>Spot Pay</h2></div></div>
+              <div class="spot-pay-options">
+                <button class="spot-pay-option" id="spot-pay-collect">
+                  <span class="spot-pay-option-icon collect" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18v12H3zM7 10h4M7 14h7"/></svg>
+                  </span>
+                  <span class="spot-pay-option-copy"><strong>Collect</strong><small id="spot-pay-collect-status">Payment required</small></span>
+                  <span class="spot-pay-option-amount" id="spot-pay-collect-amount"></span>
+                  <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+                </button>
+                <button class="spot-pay-option unavailable" id="spot-pay-pay" disabled>
+                  <span class="spot-pay-option-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                  </span>
+                  <span class="spot-pay-option-copy"><strong>Pay</strong><small>Not available for this transaction</small></span>
+                </button>
+              </div>
+            </section>
+          </div>
+
+          <footer class="txn-action-bar">
+            <button class="txn-back" id="spot-pay-back">Back</button>
+            <button class="txn-next" id="spot-pay-next">Next <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+          </footer>
+        </section>
+
+        <!-- ===== SCREEN: TRANSACTION · COLLECT ===== -->
+        <section class="screen no-tabs service-editor-screen spot-pay-editor" data-screen="transaction-collect">
+          <header class="service-editor-header">
+            <button id="spot-collect-back" aria-label="Back to Payment">Back</button>
+            <h1>Collect</h1>
+            <button class="service-save" id="spot-collect-done">Done</button>
+          </header>
+          <div class="screen-body service-editor-body spot-collect-body">
+            <section class="spot-breakdown-card" aria-labelledby="spot-breakdown-title">
+              <div class="spot-section-label" id="spot-breakdown-title">Breakdown</div>
+              <div id="spot-breakdown-lines"></div>
+              <div class="spot-payment-totals" id="spot-payment-totals"></div>
+            </section>
+
+            <section class="service-price-card spot-payment-info">
+              <h2>Payment method</h2>
+              <div class="service-price-segments" id="spot-payment-methods" role="radiogroup" aria-label="Payment method">
+                <label><input type="radio" name="spot-payment-method" value="check" checked><span>Check</span></label>
+                <label><input type="radio" name="spot-payment-method" value="card"><span>Credit card</span></label>
+                <label><input type="radio" name="spot-payment-method" value="invoice"><span>Invoice</span></label>
+              </div>
+              <div id="spot-method-content"></div>
+            </section>
+          </div>
+        </section>
+
+        <!-- ===== SCREEN: TRANSACTION · CARD PAYMENT ===== -->
+        <section class="screen no-tabs service-editor-screen spot-card-screen" data-screen="transaction-card-payment">
+          <header class="service-editor-header">
+            <button id="spot-card-back" aria-label="Back to Collect">Back</button>
+            <h1>Card payment</h1>
+            <button class="service-save" id="spot-card-save">Save</button>
+          </header>
+          <div class="screen-body service-editor-body">
+            <div class="spot-card-total"><span>Amount to collect</span><strong id="spot-card-total"></strong></div>
+            <section class="service-price-card spot-card-form">
+              <div class="spot-card-brand"><span class="spot-card-brand-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></span><span><strong>Credit card</strong><small>Visa, Mastercard, American Express</small></span></div>
+              <label class="service-rate-label" for="spot-card-number">Card number</label>
+              <div class="service-rate-field"><input id="spot-card-number" type="text" inputmode="numeric" autocomplete="cc-number" placeholder="0000 0000 0000 0000" maxlength="19"></div>
+              <div class="spot-card-field-grid">
+                <label><span class="service-rate-label">Expires</span><div class="service-rate-field"><input id="spot-card-expiry" type="text" inputmode="numeric" autocomplete="cc-exp" placeholder="MM/YY" maxlength="5"></div></label>
+                <label><span class="service-rate-label">CVV</span><div class="service-rate-field"><input id="spot-card-cvv" type="password" inputmode="numeric" autocomplete="cc-csc" placeholder="000" maxlength="4"></div></label>
+              </div>
+              <p class="service-field-error" id="spot-card-error" role="alert"></p>
+            </section>
+            <p class="spot-secure-note"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Secure card payment · prototype only</p>
+          </div>
+        </section>
+
+        <!-- ===== SCREEN: TRANSACTION · DRIVER ===== -->
+        <section class="screen no-tabs transaction-screen" data-screen="transaction-driver">
+          <header class="txn-header">
+            <div class="txn-header-row">
+              <button class="txn-exit-btn" id="driver-exit" aria-label="Save and exit transaction">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                Exit
+              </button>
+              <div class="txn-header-title"><span>Transaction</span><strong id="driver-stop-number">Stop #1</strong></div>
+              <span class="txn-header-spacer" aria-hidden="true"></span>
+            </div>
+            <button class="txn-progress-icons" id="driver-progress" aria-label="Transaction progress, step 3 of 5, Driver">
+              <span class="txn-icon-steps" aria-hidden="true">
+                <span class="completed"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5h10v16H5V5h2"/><path d="M9 3h6v4H9zM8 13l2 2 5-5"/></svg></i><small>Services</small></span>
+                <span class="completed" id="driver-spot-step"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18M7 15h4"/></svg></i><small>Spot Pay</small></span>
+                <span class="active"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4.5l5 5L8 21H3v-5zM12 7l5 5"/></svg></i><small>Driver</small></span>
+                <span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4l5 5L8 21H3v-5zM13 6l5 5"/></svg></i><small>Customer</small></span>
+                <span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg></i><small>Review</small></span>
+              </span>
+            </button>
+          </header>
+
+          <div class="screen-body txn-body driver-body">
+            <div class="txn-location-card" id="driver-location-card"></div>
+            <div class="spot-transaction-id" aria-label="Transaction number">
+              <span><small>Transaction number</small><strong id="driver-transaction-number"></strong></span>
+              <button id="driver-copy-transaction" type="button">Copy ID</button>
+            </div>
+
+            <section class="txn-section">
+              <div class="txn-section-heading">
+                <div>
+                  <span class="eyebrow">Driver requirements</span>
+                  <div class="txn-section-title-row">
+                    <h2>Halogen checks</h2>
+                    <span class="txn-section-count" id="driver-check-count"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="driver-checklist-list" id="driver-checklist-list"></div>
+            </section>
+
+            <section class="txn-section">
+              <div class="txn-section-heading"><div><span class="eyebrow">Sign-off</span><h2 id="driver-signature-title">Driver signature</h2></div></div>
+              <div class="txn-signature-card" role="group" aria-labelledby="driver-signature-title">
+                <div class="txn-signer">
+                  <span class="txn-signer-avatar" aria-hidden="true">LK</span>
+                  <span class="txn-signer-copy"><strong>Lawrence Kibbey</strong><small>Tanker Driver · Unit #4821</small></span>
+                  <span class="txn-signature-status" id="driver-signature-status">Not signed</span>
+                </div>
+                <div class="txn-signature-pad">
+                  <canvas id="driver-signature-canvas" aria-label="Driver signature area"></canvas>
+                  <span class="txn-signature-line" aria-hidden="true"></span>
+                </div>
+                <div class="txn-signature-tools">
+                  <span>Sign with a finger or stylus</span>
+                  <button id="driver-signature-clear" type="button">Clear</button>
+                </div>
+              </div>
+            </section>
+
+            <button class="txn-print-row" id="driver-print">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
+              <span><strong>Print receipt</strong><small id="driver-print-status">Send a copy to the truck printer</small></span>
+            </button>
+          </div>
+
+          <footer class="txn-action-bar">
+            <button class="txn-back" id="driver-back">Back</button>
+            <button class="txn-next" id="driver-next">Next <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+          </footer>
+        </section>
+
+        <!-- ===== SCREEN: DRIVER · HALOGEN CHECKLIST ===== -->
+        <section class="screen no-tabs service-editor-screen driver-check-screen" data-screen="transaction-driver-check">
+          <header class="service-editor-header">
+            <button id="driver-check-cancel">Cancel</button>
+            <h1>Halogen checklist</h1>
+            <button class="service-save" id="driver-check-save">Save</button>
+          </header>
+          <div class="screen-body service-editor-body driver-check-body">
+            <div class="driver-check-context" id="driver-check-context"></div>
+
+            <section class="txn-form-card" id="driver-quality-section" hidden>
+              <div class="txn-field-heading"><span><strong>Quality</strong><small>Classify the collected used oil</small></span><b>Required</b></div>
+              <div class="service-price-segments driver-quality-segments" role="radiogroup" aria-label="Used oil quality">
+                <label><input type="radio" name="driver-quality" value="low"><span>Low<small>Not re-refinable</small></span></label>
+                <label><input type="radio" name="driver-quality" value="medium"><span>Medium</span></label>
+                <label><input type="radio" name="driver-quality" value="high"><span>High<small>Re-refinable</small></span></label>
+              </div>
+            </section>
+
+            <section class="txn-form-card">
+              <div class="txn-field-heading"><span><strong>Halogen screen</strong><small>Record the result of the field test</small></span><b>Required</b></div>
+              <div class="service-price-segments driver-result-segments" role="radiogroup" aria-label="Halogen screen result">
+                <label><input type="radio" name="driver-halogen" value="pass"><span>Pass</span></label>
+                <label><input type="radio" name="driver-halogen" value="fail"><span>Fail</span></label>
+              </div>
+            </section>
+
+            <section class="txn-form-card driver-chlor-section" id="driver-chlor-section" hidden>
+              <div class="txn-field-heading"><span><strong>Chlor-D-Tect</strong><small>Additional result after a failed screen</small></span><b>Follow-up</b></div>
+              <div class="service-price-segments driver-result-segments" role="radiogroup" aria-label="Chlor-D-Tect result">
+                <label><input type="radio" name="driver-chlor" value="pass"><span>Pass</span></label>
+                <label><input type="radio" name="driver-chlor" value="fail"><span>Fail</span></label>
+              </div>
+            </section>
+
+            <label class="driver-notes-card" id="driver-notes-card">
+              <span><strong>Notes</strong><small id="driver-notes-help">Available when the Halogen screen fails</small></span>
+              <textarea id="driver-check-notes" rows="5" placeholder="Add details about the failed screen" disabled></textarea>
+            </label>
+            <p class="service-field-error" id="driver-check-error" role="alert"></p>
+          </div>
+        </section>
+
+        <!-- ===== SCREEN: TRANSACTION · CUSTOMER ===== -->
+        <section class="screen no-tabs transaction-screen" data-screen="transaction-customer">
+          <header class="txn-header">
+            <div class="txn-header-row">
+              <button class="txn-exit-btn" id="customer-exit" aria-label="Save and exit transaction">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                Exit
+              </button>
+              <div class="txn-header-title"><span>Transaction</span><strong id="customer-stop-number">Stop #1</strong></div>
+              <span class="txn-header-spacer" aria-hidden="true"></span>
+            </div>
+            <button class="txn-progress-icons" id="customer-progress" aria-label="Transaction progress, step 4 of 5, Customer">
+              <span class="txn-icon-steps" aria-hidden="true">
+                <span class="completed"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5h10v16H5V5h2"/><path d="M9 3h6v4H9zM8 13l2 2 5-5"/></svg></i><small>Services</small></span>
+                <span class="completed" id="customer-spot-step"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18M7 15h4"/></svg></i><small>Spot Pay</small></span>
+                <span class="completed"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4.5l5 5L8 21H3v-5zM12 7l5 5"/></svg></i><small>Driver</small></span>
+                <span class="active"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4l5 5L8 21H3v-5zM13 6l5 5"/></svg></i><small>Customer</small></span>
+                <span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg></i><small>Review</small></span>
+              </span>
+            </button>
+          </header>
+
+          <div class="screen-body txn-body customer-body">
+            <div class="txn-location-card" id="customer-location-card"></div>
+            <div class="spot-transaction-id" aria-label="Transaction number">
+              <span><small>Transaction number</small><strong id="customer-transaction-number"></strong></span>
+              <button id="customer-copy-transaction" type="button">Copy ID</button>
+            </div>
+
+            <div class="txn-row-group customer-disclaimer-group">
+              <button class="txn-row" id="customer-disclaimer-row">
+                <span class="txn-row-icon info" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg></span>
+                <span><strong>Customer Disclaimer</strong></span>
+                <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+              </button>
+            </div>
+
+            <section class="txn-section">
+              <div class="txn-section-heading"><div><h2 id="customer-signature-title">Signature</h2></div></div>
+              <div class="txn-signature-card" role="group" aria-labelledby="customer-signature-title">
+                <div class="txn-signer editable">
+                  <span class="txn-signer-avatar neutral" id="customer-signer-avatar" aria-hidden="true"></span>
+                  <span class="txn-signer-input">
+                    <span class="txn-signer-label"><label for="customer-name">Name</label><span class="txn-signature-status" id="customer-signature-status">Not signed</span></span>
+                    <input class="txn-input" id="customer-name" type="text" autocomplete="name" autocapitalize="words" placeholder="Enter Name">
+                  </span>
+                </div>
+                <div class="txn-signature-pad">
+                  <canvas id="customer-signature-canvas" aria-label="Customer signature area"></canvas>
+                  <span class="txn-signature-line" aria-hidden="true"></span>
+                </div>
+                <div class="txn-signature-tools">
+                  <span>Please let customer sign</span>
+                  <button id="customer-signature-clear" type="button">Clear</button>
+                </div>
+              </div>
+            </section>
+
+            <button class="txn-print-row" id="customer-print">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
+              <span><strong>Print receipt</strong><small id="customer-print-status">Send a copy to the truck printer</small></span>
+            </button>
+          </div>
+
+          <footer class="txn-action-bar">
+            <button class="txn-back" id="customer-back">Back</button>
+            <button class="txn-next" id="customer-next">Next <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+          </footer>
+        </section>
+
+        <!-- ===== SCREEN: CUSTOMER · DISCLAIMER ===== -->
+        <section class="screen no-tabs transaction-resource-screen" data-screen="transaction-customer-disclaimer">
+          <header class="resource-page-header">
+            <button class="resource-back-btn" id="customer-disclaimer-back" aria-label="Back to customer">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            </button>
+            <div><small>Transaction</small><h1>Disclaimer</h1></div>
+            <span class="resource-header-spacer"></span>
+          </header>
+          <div class="screen-body resource-page-body">
+            <section class="resource-content-card customer-disclaimer-text">
+              <p>This is to certify that the above-named materials are properly classified, described, packaged, marked, labeled, and are in proper condition for transportation according to the applicable regulations of the Department of Transportation. We the generator hereby certify that we have not mixed any hazardous waste in this product being picked up by Universal Environmental Services. We the generator, also certify that this product does not contain any detectable levels of PCB's. Upon the acceptance of conforming materials by UES, title to and all other incidents of ownership to such conforming materials including all risk of loss shall transfer from the generator to UES. If UES determines within 30 days after acceptance that the material is nonconforming, UES shall immediately notify the generator and UES may (at its option) arrange for the material to be returned.  Regardless of whether UES revokes acceptance of nonconforming material, the generator shall be responsible for any cost or damages UES sustains as a result of such material being nonconforming.</p>
+            </section>
+          </div>
+        </section>
+
+        <!-- ===== SCREEN: CUSTOMER · RECEIPT CONTACT ===== -->
+        <section class="screen no-tabs service-editor-screen" data-screen="transaction-receipt-contact">
+          <header class="service-editor-header">
+            <span aria-hidden="true"></span>
+            <h1>Receipt contact</h1>
+            <button class="service-save" id="receipt-confirm">Confirm</button>
+          </header>
+          <div class="screen-body service-editor-body receipt-body">
+            <h2 class="service-page-title">Transaction receipt contact information</h2>
+
+            <section class="txn-form-card">
+              <label class="txn-receipt-label" for="receipt-contact-name">Contact name</label>
+              <input class="txn-input" id="receipt-contact-name" type="text" autocomplete="name" autocapitalize="words">
+            </section>
+
+            <div class="spot-section-label">Email contact information</div>
+            <section class="txn-form-card">
+              <label class="txn-receipt-label" for="receipt-email-input">Enter new email address below. When finished press done.</label>
+              <div class="txn-input-add">
+                <input class="txn-input" id="receipt-email-input" type="email" inputmode="email" autocomplete="email" autocapitalize="off" aria-describedby="receipt-email-error">
+                <button id="receipt-email-add" type="button" aria-label="Done"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+              </div>
+              <p class="service-field-error" id="receipt-email-error" role="alert"></p>
+              <span class="txn-receipt-label">Receipt will be sent to below emails</span>
+              <div class="txn-contact-list" id="receipt-email-list"></div>
+              <small class="txn-receipt-hint">Tap an email to edit, or swipe to delete</small>
+              <label class="txn-toggle-row inset">
+                <span><strong>Send me an email copy</strong></span>
+                <input type="checkbox" id="receipt-email-copy">
+                <span class="txn-switch" aria-hidden="true"><i></i></span>
+              </label>
+            </section>
+
+            <div class="spot-section-label">Phone contact information</div>
+            <section class="txn-form-card">
+              <label class="txn-receipt-label" for="receipt-phone-input">Enter new phone # below. When finished press done.</label>
+              <div class="txn-input-add">
+                <input class="txn-input" id="receipt-phone-input" type="tel" inputmode="tel" autocomplete="tel" aria-describedby="receipt-phone-error">
+                <button id="receipt-phone-add" type="button" aria-label="Done"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+              </div>
+              <p class="service-field-error" id="receipt-phone-error" role="alert"></p>
+              <span class="txn-receipt-label">Receipt will be sent to below phone #</span>
+              <div class="txn-contact-list" id="receipt-phone-list"></div>
+              <small class="txn-receipt-hint">Tap a phone # to edit, or swipe to delete</small>
+              <label class="txn-toggle-row inset">
+                <span><strong>Send me a sms copy</strong></span>
+                <input type="checkbox" id="receipt-sms-copy">
+                <span class="txn-switch" aria-hidden="true"><i></i></span>
+              </label>
+            </section>
+          </div>
+        </section>
+
+        <!-- ===== SCREEN: TRANSACTION · REVIEW ===== -->
+        <section class="screen no-tabs transaction-screen" data-screen="transaction-review">
+          <header class="txn-header">
+            <div class="txn-header-row">
+              <button class="txn-exit-btn" id="review-exit" aria-label="Save and exit transaction">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                Exit
+              </button>
+              <div class="txn-header-title"><span>Transaction</span><strong id="review-stop-number">Stop #1</strong></div>
+              <button class="txn-header-icon-btn danger" id="review-delete" aria-label="Delete transaction">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/><path d="M10 11v6M14 11v6"/></svg>
+              </button>
+            </div>
+            <button class="txn-progress-icons" id="review-progress" aria-label="Transaction progress, step 5 of 5, Review">
+              <span class="txn-icon-steps" aria-hidden="true">
+                <span class="completed"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5h10v16H5V5h2"/><path d="M9 3h6v4H9zM8 13l2 2 5-5"/></svg></i><small>Services</small></span>
+                <span class="completed" id="review-spot-step"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18M7 15h4"/></svg></i><small>Spot Pay</small></span>
+                <span class="completed"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4.5l5 5L8 21H3v-5zM12 7l5 5"/></svg></i><small>Driver</small></span>
+                <span class="completed"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4l5 5L8 21H3v-5zM13 6l5 5"/></svg></i><small>Customer</small></span>
+                <span class="active"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg></i><small>Review</small></span>
+              </span>
+            </button>
+          </header>
+          <div class="screen-body txn-body review-body">
+            <div class="txn-location-card" id="review-location-card"></div>
+            <div class="spot-transaction-id" aria-label="Transaction number">
+              <span><small>Transaction number</small><strong id="review-transaction-number"></strong></span>
+              <button id="review-copy-transaction" type="button">Copy ID</button>
+            </div>
+
+            <div class="review-service-list" id="review-service-list"></div>
+
+            <section class="review-complete-actions" id="review-complete-actions" hidden>
+              <div class="txn-row-group">
+                <button class="txn-row" id="review-send-receipt">
+                  <span class="txn-row-icon info" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12v20l-3-2-3 2-3-2-3 2z"/><path d="M9 7h6M9 11h6M9 15h3"/></svg></span>
+                  <span><strong>Send E Receipt</strong></span>
+                  <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+                </button>
+                <button class="txn-row" id="review-restart-bt">
+                  <span class="txn-row-icon info" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 7 10 10-5 5V2l5 5L7 17"/></svg></span>
+                  <span><strong>Restart BT</strong></span>
+                </button>
+              </div>
+              <button class="txn-print-row" id="review-print">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
+                <span><strong>Print receipt</strong><small id="review-print-status">Send a copy to the truck printer</small></span>
+              </button>
+            </section>
+          </div>
+          <footer class="txn-action-bar" id="review-action-bar">
+            <button class="txn-back" id="review-back">Back</button>
+            <button class="txn-next" id="review-submit"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg> Submit</button>
+            <button class="txn-next" id="review-done" hidden><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg> Done</button>
+          </footer>
+        </section>
+
+        <!-- ===== SCREEN: TRANSACTION · CHOOSE SERVICE ===== -->
+        <section class="screen no-tabs transaction-catalog-screen" data-screen="transaction-service-picker">
+          <header class="catalog-header">
+            <button class="catalog-back" id="txn-service-picker-back" aria-label="Back to transaction">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+              <span>Back</span>
+            </button>
+            <div class="catalog-header-copy"><small>Transaction · Services</small><h1>Add a service</h1></div>
+          </header>
+          <div class="catalog-tools">
+            <label class="catalog-search">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg>
+              <input id="txn-service-search" type="search" placeholder="Search services" aria-label="Search services" autocomplete="off">
+            </label>
+          </div>
+          <div class="screen-body catalog-body">
+            <div class="catalog-intro"><h2>Choose a service</h2><span id="txn-catalog-count"></span></div>
+            <p class="catalog-help">Select the service you want to add to this visit.</p>
+            <div class="catalog-list" id="txn-service-catalog"></div>
+          </div>
+        </section>
+
+        <!-- ===== SCREEN: TRANSACTION · CHOOSE COMPONENT ===== -->
+        <section class="screen no-tabs transaction-catalog-screen" data-screen="transaction-component-picker">
+          <header class="catalog-header">
+            <button class="catalog-back icon-only" id="txn-component-picker-back" aria-label="Back to services">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+            <div class="catalog-header-copy"><small>Transaction · Services</small><h1>Add a service</h1></div>
+          </header>
+          <div class="screen-body catalog-body">
+            <div class="catalog-selection-context" id="txn-selected-service-name"></div>
+            <div class="catalog-intro"><h2 id="txn-component-heading">Choose a component</h2></div>
+            <p class="catalog-help">Select one item to include in this service.</p>
+            <div class="catalog-list component-list" id="txn-component-catalog" role="radiogroup" aria-labelledby="txn-component-heading"></div>
+          </div>
+          <footer class="catalog-selection-bar">
+            <div class="catalog-selection-summary" id="txn-component-summary" role="status" aria-live="polite">Select one component to continue</div>
+            <button class="catalog-save" id="txn-component-save" disabled><span>Add service</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+          </footer>
+        </section>
+
+        <!-- ===== SCREEN: TRANSACTION · SERVICE INPUT ===== -->
+        <section class="screen no-tabs service-editor-screen" data-screen="transaction-service-input">
+          <header class="service-editor-header">
+            <button id="service-input-cancel">Cancel</button><h1>Service input</h1><button class="service-save" id="service-input-save">Save</button>
+          </header>
+          <div class="screen-body service-editor-body">
+            <div class="service-context-card" id="service-input-context"></div>
+            <div class="service-section-title"><h2>Quantity & pricing</h2><span id="service-unit-count"></span></div>
+            <p class="service-editor-help">Enter the quantity collected for each unit.</p>
+            <div id="service-unit-list" class="service-unit-list"></div>
+            <button class="txn-add-service" id="service-add-uom"><span aria-hidden="true">+</span> Add UOM</button>
+            <p class="service-editor-footnote">UOM = unit of measure</p>
+          </div>
+        </section>
+
+        <section class="screen no-tabs service-editor-screen" data-screen="transaction-service-uom">
+          <header class="service-editor-header">
+            <button id="service-uom-cancel">Cancel</button><h1>Add a unit</h1><button class="service-save" id="service-uom-save" disabled>Add</button>
+          </header>
+          <div class="screen-body service-editor-body">
+            <h2 class="service-page-title" id="service-uom-heading">Unit of measure</h2>
+            <p class="service-editor-help">Choose one unit to add to this service.</p>
+            <div id="service-uom-options" class="component-list" role="radiogroup" aria-labelledby="service-uom-heading"></div>
+          </div>
+        </section>
+
+        <section class="screen no-tabs service-editor-screen" data-screen="transaction-service-amount">
+          <header class="service-editor-header">
+            <button id="service-amount-cancel">Cancel</button><h1>Enter amount</h1><button class="service-save" id="service-amount-save">Save</button>
+          </header>
+          <div class="screen-body service-editor-body service-amount-body">
+            <div class="service-amount-context"><span id="service-amount-component"></span><strong id="service-amount-unit"></strong></div>
+            <label class="service-amount-label" for="service-amount-value">Quantity</label>
+            <input id="service-amount-value" class="service-amount-value" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" value="0" aria-describedby="service-amount-error">
+            <p class="service-field-error" id="service-amount-error" role="alert"></p>
+            <p class="service-editor-help">Enter the quantity collected.</p>
+            <div class="service-keypad" id="service-amount-keypad" aria-label="Quantity keypad">
+              <button data-amount-key="7">7</button><button data-amount-key="8">8</button><button data-amount-key="9">9</button>
+              <button data-amount-key="4">4</button><button data-amount-key="5">5</button><button data-amount-key="6">6</button>
+              <button data-amount-key="1">1</button><button data-amount-key="2">2</button><button data-amount-key="3">3</button>
+              <button data-amount-key=".">.</button><button data-amount-key="0">0</button><button data-amount-key="backspace" class="key-action" aria-label="Delete last character">⌫</button>
+              <button data-amount-key="clear" class="key-action key-full">Clear</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="screen no-tabs service-editor-screen" data-screen="transaction-service-price">
+          <header class="service-editor-header">
+            <button id="service-price-cancel">Cancel</button><h1>Price adjustment</h1><button class="service-save" id="service-price-save">Save</button>
+          </header>
+          <div class="screen-body service-editor-body">
+            <div class="service-price-context" id="service-price-context"></div>
+            <section class="service-price-card">
+              <h2>Pricing type</h2>
+              <div class="service-price-segments" id="service-price-modes" role="radiogroup" aria-label="Pricing type"></div>
+              <p class="service-editor-help" id="service-contract-help"></p>
+              <label class="service-rate-label" for="service-price-rate">Price per <span id="service-price-unit"></span></label>
+              <div class="service-rate-field"><span>$</span><input id="service-price-rate" type="text" inputmode="decimal" autocomplete="off" aria-describedby="service-price-error"><span id="service-price-abbr"></span></div>
+              <p class="service-field-error" id="service-price-error" role="alert"></p>
+            </section>
+            <section class="service-price-card">
+              <h2>Adjustment details</h2>
+              <button class="service-reason-button" id="service-reason-open"><span><small>Reason · optional</small><strong id="service-reason-value">Choose a reason</strong></span><span aria-hidden="true">›</span></button>
+              <label class="service-rate-label" for="service-price-notes">Notes <span class="service-optional">· optional</span></label>
+              <textarea id="service-price-notes" rows="4" maxlength="1000" placeholder="Add details about this adjustment…"></textarea>
+            </section>
+          </div>
+        </section>
+
+        <section class="screen no-tabs service-editor-screen" data-screen="transaction-service-reason">
+          <header class="service-editor-header">
+            <button id="service-reason-cancel">Cancel</button><h1>Select a reason</h1><button class="service-save" id="service-reason-save">Done</button>
+          </header>
+          <div class="screen-body service-editor-body">
+            <h2 class="service-page-title" id="service-reason-heading">Adjustment reason</h2>
+            <p class="service-editor-help">Choose the reason that best describes this change.</p>
+            <div id="service-reason-options" class="component-list" role="radiogroup" aria-labelledby="service-reason-heading"></div>
+          </div>
+        </section>
+
+        <!-- ===== SCREEN: TRANSACTION · NOTES ===== -->
+        <section class="screen no-tabs transaction-resource-screen" data-screen="transaction-notes">
+          <header class="resource-page-header">
+            <button class="resource-back-btn" data-go="transaction-services" aria-label="Back to transaction">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            </button>
+            <div><small>Transaction</small><h1>Notes</h1></div>
+            <span class="resource-header-spacer"></span>
+          </header>
+          <div class="screen-body resource-page-body">
+            <div class="resource-stop-context" id="txn-notes-context"></div>
+
+            <section class="txn-note-state txn-note-existing" id="txn-note-existing" hidden>
+              <div class="resource-section-heading"><span>Transaction note</span><button id="txn-edit-note">Edit</button></div>
+              <div class="txn-note-readonly">
+                <p id="txn-note-readonly-text"></p>
+                <small>Last updated for this transaction</small>
+              </div>
+            </section>
+
+            <section class="txn-note-state txn-note-empty" id="txn-note-empty" hidden>
+              <span class="txn-note-empty-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8z"/><path d="M16 3v5h5M8 13h8M8 17h5"/></svg>
+              </span>
+              <h2>No note added</h2>
+              <p>Add instructions or context only when this transaction needs it.</p>
+              <button id="txn-add-note">Add note</button>
+            </section>
+
+            <section class="resource-content-card txn-note-editor" id="txn-note-editor" hidden>
+              <div class="resource-section-heading"><span>Transaction note</span><small>Internal</small></div>
+              <label class="txn-resource-field">
+                <span>Instructions or context</span>
+                <textarea id="txn-note-input" placeholder="Add instructions or context for this transaction"></textarea>
+                <small>Visible to the team working on this transaction.</small>
+              </label>
+            </section>
+          </div>
+          <footer class="resource-page-actions" id="txn-note-actions" hidden>
+            <button class="resource-secondary-action" id="txn-cancel-note-edit">Cancel</button>
+            <button class="resource-primary-action" id="txn-save-note">Save note</button>
+          </footer>
+        </section>
+
+        <!-- ===== SCREEN: TRANSACTION · ATTACHMENTS ===== -->
+        <section class="screen no-tabs transaction-resource-screen" data-screen="transaction-files">
+          <header class="resource-page-header">
+            <button class="resource-back-btn resource-back-label" data-go="transaction-services" aria-label="Back to transaction">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+              <span>Back</span>
+            </button>
+            <div><small>Transaction</small><h1>Attachments <span id="txn-file-count">0</span></h1></div>
+            <button class="resource-header-add" id="txn-upload-trigger" aria-label="Add a file">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+              <span>Add</span>
+            </button>
+          </header>
+          <div class="screen-body resource-page-body resource-files-body">
+            <div class="resource-stop-context" id="txn-files-context"></div>
+            <div class="resource-list-heading"><span>Uploaded files</span><small>Tap a file to view its details</small></div>
+            <div class="txn-file-list" id="txn-file-list"></div>
+          </div>
+        </section>
+
+        <!-- ===== SCREEN: TRANSACTION · FILE DETAILS ===== -->
+        <section class="screen no-tabs transaction-resource-screen" data-screen="transaction-file-details">
+          <header class="resource-page-header">
+            <button class="resource-back-btn" id="txn-file-details-back" aria-label="Back to attachments">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            </button>
+            <div><small>Attachment</small><h1 id="txn-file-details-title">File details</h1></div>
+            <span class="resource-header-spacer"></span>
+          </header>
+          <div class="screen-body resource-page-body">
+            <div class="txn-file-details-hero">
+              <span class="txn-sheet-icon" id="txn-file-details-icon">FILE</span>
+              <div><strong id="txn-file-details-name">Selected file</strong><span id="txn-file-details-meta"></span></div>
+            </div>
+            <section class="resource-content-card">
+              <div class="resource-section-heading"><span>Description</span><small>Optional</small></div>
+              <label class="txn-resource-field txn-description-field">
+                <textarea id="txn-file-details-description" placeholder="Example: Tank condition before service"></textarea>
+                <small>Explain what this file shows so it is easy to identify later.</small>
+              </label>
+            </section>
+          </div>
+          <footer class="resource-page-actions">
+            <button class="resource-secondary-action" id="txn-cancel-file-details">Cancel</button>
+            <button class="resource-primary-action" id="txn-save-file-details">Save file</button>
+          </footer>
+        </section>
+
         <!-- ===== SCREEN: LOCATION TANKS ===== -->
         <section class="screen no-tabs" data-screen="tanks">
           <div class="app-header tanks-header">
@@ -852,6 +1588,80 @@
       </div><!-- /screens -->
 
       <!-- ===== POPUPS ===== -->
+      <div class="popup-overlay" id="popup-transaction-exit" aria-hidden="true">
+        <div class="popup caution" role="dialog" aria-modal="true" aria-labelledby="txn-exit-title" aria-describedby="txn-exit-description">
+          <div class="popup-icon caution-icon" aria-hidden="true">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <h3 id="txn-exit-title">Leave this transaction?</h3>
+          <p id="txn-exit-description">Save your progress as a draft to resume it later from Tasks.</p>
+          <div class="confirm-actions">
+            <button class="popup-btn outline" id="txn-continue-editing" data-close>Continue editing</button>
+            <button class="popup-btn primary" id="txn-confirm-save">Save draft and leave</button>
+            <button class="popup-btn danger" id="txn-discard">Discard transaction</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="popup-overlay" id="popup-electronic-receipt" aria-hidden="true">
+        <div class="popup" role="dialog" aria-modal="true" aria-labelledby="electronic-receipt-title" aria-describedby="electronic-receipt-description">
+          <div class="popup-icon info-icon" aria-hidden="true">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          </div>
+          <h3 id="electronic-receipt-title">Electronic receipt</h3>
+          <p id="electronic-receipt-description">Please confirm with customer that the receipt contact name and email address are correct</p>
+          <button class="popup-btn primary" id="electronic-receipt-ok">Ok</button>
+        </div>
+      </div>
+
+      <div class="popup-overlay" id="popup-receipt-missing" aria-hidden="true">
+        <div class="popup caution" role="dialog" aria-modal="true" aria-labelledby="receipt-missing-title" aria-describedby="receipt-missing-description">
+          <div class="popup-icon caution-icon" aria-hidden="true">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <h3 id="receipt-missing-title">Receipt information missing</h3>
+          <p id="receipt-missing-description">You have not entered a valid contact name and email for this transaction. Please enter this information or press confirm to not send electronic receipt.</p>
+          <div class="confirm-actions">
+            <button class="popup-btn outline" id="receipt-missing-cancel" data-close>Cancel</button>
+            <button class="popup-btn primary" id="receipt-missing-continue">Confirm</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="popup-overlay" id="popup-review-saving" aria-hidden="true">
+        <div class="popup" role="alertdialog" aria-modal="true" aria-busy="true" aria-labelledby="review-saving-title">
+          <div class="popup-icon info-icon" aria-hidden="true">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          </div>
+          <p id="review-saving-title">Wait for the transaction to be saved</p>
+        </div>
+      </div>
+
+      <div class="popup-overlay" id="popup-review-sent" aria-hidden="true">
+        <div class="popup" role="dialog" aria-modal="true" aria-labelledby="review-sent-title" aria-describedby="review-sent-description">
+          <div class="popup-icon success-icon" aria-hidden="true">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>
+          </div>
+          <h3 id="review-sent-title">Transaction was successfully sent.</h3>
+          <p id="review-sent-description">You may now print receipts.</p>
+          <button class="popup-btn primary" id="review-sent-ok">Ok</button>
+        </div>
+      </div>
+
+      <div class="popup-overlay" id="popup-review-delete" aria-hidden="true">
+        <div class="popup error" role="alertdialog" aria-modal="true" aria-labelledby="review-delete-title" aria-describedby="review-delete-description">
+          <div class="popup-icon error-icon" aria-hidden="true">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/><path d="M10 11v6M14 11v6"/></svg>
+          </div>
+          <h3 id="review-delete-title">Delete this transaction?</h3>
+          <p id="review-delete-description">This transaction will be removed and can't be recovered.</p>
+          <div class="confirm-actions">
+            <button class="popup-btn outline" id="review-delete-cancel" data-close>Cancel</button>
+            <button class="popup-btn danger" id="review-delete-confirm">Delete transaction</button>
+          </div>
+        </div>
+      </div>
+
       <div class="popup-overlay" id="popup-error">
         <div class="popup error">
           <div class="popup-icon error-icon">
@@ -1016,6 +1826,36 @@
         </div>
       </div>
 
+      <!-- File source picker -->
+      <div class="sheet-overlay" id="popup-file-source" aria-hidden="true">
+        <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="file-source-title">
+          <div class="sheet-handle"></div>
+          <div class="sheet-header">
+            <h3 id="file-source-title">Add a file</h3>
+            <button class="sheet-close" data-close aria-label="Close file options">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
+          </div>
+          <div class="file-source-options">
+            <button id="txn-source-camera">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4l1.5 2H20a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l1.5-2z"/><circle cx="12" cy="13" r="4"/></svg>
+              <span><strong>Camera</strong><small>Take a new photo</small></span>
+            </button>
+            <button id="txn-source-media">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+              <span><strong>Photos and videos</strong><small>Choose from your library</small></span>
+            </button>
+            <button id="txn-source-file">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h6"/></svg>
+              <span><strong>File</strong><small>PDF, Word or spreadsheet</small></span>
+            </button>
+          </div>
+          <input class="txn-file-input" type="file" id="txn-camera-input" accept="image/*" capture="environment">
+          <input class="txn-file-input" type="file" id="txn-media-input" accept="image/*,video/*">
+          <input class="txn-file-input" type="file" id="txn-document-input" accept=".pdf,.doc,.docx,.xls,.xlsx,.txt">
+        </div>
+      </div>
+
       <!-- Bottom sheet: date picker -->
       <div class="sheet-overlay" id="sheet-datepicker" aria-hidden="true">
         <div class="sheet" role="dialog" aria-label="Select date">
@@ -1109,6 +1949,10 @@
         <li><button data-go="tanks">
           <span class="nav-num">11</span>
           <div><strong>Tanks</strong><span>Location tank management</span></div>
+        </button></li>
+        <li><button data-go="transaction-services">
+          <span class="nav-num">12</span>
+          <div><strong>Transaction</strong><span>Services · step 1 of 5</span></div>
         </button></li>
       </ul>
 
