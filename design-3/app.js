@@ -70,6 +70,12 @@
     });
   });
 
+  // Completed wizard steps in the transaction header jump back to that step.
+  document.addEventListener('click', e => {
+    const step = e.target.closest('.txn-icon-steps [data-step-target]');
+    if (step && !step.disabled) goTo(step.dataset.stepTarget, 'back');
+  });
+
   // ===== TAB BAR =====
   const TABS = [
     { id: 'routes', label: 'Routes', icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg>' },
@@ -1612,7 +1618,6 @@
   function initSpotPayControls() {
     document.getElementById('spot-pay-back')?.addEventListener('click', () => goTo('transaction-services', 'back'));
     document.getElementById('spot-pay-collect')?.addEventListener('click', () => goTo('transaction-collect'));
-    document.getElementById('spot-pay-progress')?.addEventListener('click', () => showToast('Spot Pay · Step 2 of 5'));
     document.getElementById('spot-pay-next')?.addEventListener('click', () => {
       if (!getTransactionResourceState().payment) {
         showToast('Complete the collection before continuing');
@@ -1725,6 +1730,7 @@
     const spotStep = document.getElementById(`${prefix}-spot-step`);
     spotStep.classList.toggle('completed', !spotSkipped);
     spotStep.classList.toggle('skipped', spotSkipped);
+    spotStep.disabled = spotSkipped;
     return spotSkipped;
   }
 
@@ -2068,8 +2074,6 @@
   }
 
   function initCustomerControls() {
-    document.getElementById('customer-progress')?.addEventListener('click', () => showToast('Customer · Step 4 of 5'));
-    document.getElementById('review-progress')?.addEventListener('click', () => showToast('Review · Step 5 of 5'));
     document.getElementById('customer-back')?.addEventListener('click', () => goTo('transaction-driver', 'back'));
     document.getElementById('review-back')?.addEventListener('click', () => goTo('transaction-customer', 'back'));
     document.getElementById('review-exit')?.addEventListener('click', () => setTransactionExitPopupOpen(true));
@@ -2168,7 +2172,6 @@
   }
 
   function initDriverControls() {
-    document.getElementById('driver-progress')?.addEventListener('click', () => showToast('Driver · Step 3 of 5'));
     document.getElementById('driver-back')?.addEventListener('click', () => goTo(transactionNeedsSpotPay() ? 'transaction-payment' : 'transaction-services', 'back'));
     document.getElementById('driver-print')?.addEventListener('click', () => {
       getDriverState().printed = true;
@@ -2350,7 +2353,6 @@
       };
     });
 
-    document.getElementById('txn-progress-icons').onclick = () => showToast('Icon wizard · Services · Step 1 of 5');
     const openServiceCatalog = () => {
       pendingCatalogService = '';
       pendingCatalogComponent = '';

@@ -543,30 +543,53 @@
               <span class="txn-header-spacer" aria-hidden="true"></span>
             </div>
 
-            <button class="txn-progress-icons" id="txn-progress-icons" aria-label="Transaction progress, step 1 of 5, Services">
-              <span class="txn-icon-steps" aria-hidden="true">
-                <span class="active">
+            <nav class="txn-progress-icons" id="txn-progress-icons" aria-label="Transaction progress, step 1 of 5, Services">
+
+              <div class="txn-icon-steps">
+
+                <button type="button" class="active" data-step-target="transaction-services" aria-current="step" disabled>
+
                   <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5h10v16H5V5h2"/><path d="M9 3h6v4H9zM8 13l2 2 5-5"/></svg></i>
+
                   <small>Services</small>
-                </span>
-                <span>
+
+                </button>
+
+                <button type="button" data-step-target="transaction-payment" disabled>
+
                   <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18M7 15h4"/></svg></i>
+
                   <small>Spot Pay</small>
-                </span>
-                <span>
+
+                </button>
+
+                <button type="button" data-step-target="transaction-driver" disabled>
+
                   <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4.5l5 5L8 21H3v-5zM12 7l5 5"/></svg></i>
+
                   <small>Driver</small>
-                </span>
-                <span>
+
+                </button>
+
+                <button type="button" data-step-target="transaction-customer" disabled>
+
                   <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4l5 5L8 21H3v-5zM13 6l5 5"/></svg></i>
+
                   <small>Customer</small>
-                </span>
-                <span>
+
+                </button>
+
+                <button type="button" data-step-target="transaction-review" disabled>
+
                   <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg></i>
+
                   <small>Review</small>
-                </span>
-              </span>
-            </button>
+
+                </button>
+
+              </div>
+
+            </nav>
           </header>
 
           <div class="screen-body txn-body">
@@ -627,30 +650,53 @@
               <span class="txn-header-spacer" aria-hidden="true"></span>
             </div>
 
-            <button class="txn-progress-icons" id="spot-pay-progress" aria-label="Transaction progress, step 2 of 5, Spot Pay">
-              <span class="txn-icon-steps" aria-hidden="true">
-                <span class="completed">
+            <nav class="txn-progress-icons" id="spot-pay-progress" aria-label="Transaction progress, step 2 of 5, Spot Pay">
+
+              <div class="txn-icon-steps">
+
+                <button type="button" class="completed" data-step-target="transaction-services">
+
                   <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5h10v16H5V5h2"/><path d="M9 3h6v4H9zM8 13l2 2 5-5"/></svg></i>
+
                   <small>Services</small>
-                </span>
-                <span class="active">
+
+                </button>
+
+                <button type="button" class="active" data-step-target="transaction-payment" aria-current="step" disabled>
+
                   <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18M7 15h4"/></svg></i>
+
                   <small>Spot Pay</small>
-                </span>
-                <span>
+
+                </button>
+
+                <button type="button" data-step-target="transaction-driver" disabled>
+
                   <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4.5l5 5L8 21H3v-5zM12 7l5 5"/></svg></i>
+
                   <small>Driver</small>
-                </span>
-                <span>
+
+                </button>
+
+                <button type="button" data-step-target="transaction-customer" disabled>
+
                   <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4l5 5L8 21H3v-5zM13 6l5 5"/></svg></i>
+
                   <small>Customer</small>
-                </span>
-                <span>
+
+                </button>
+
+                <button type="button" data-step-target="transaction-review" disabled>
+
                   <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg></i>
+
                   <small>Review</small>
-                </span>
-              </span>
-            </button>
+
+                </button>
+
+              </div>
+
+            </nav>
           </header>
 
           <div class="screen-body txn-body spot-pay-body">
@@ -749,15 +795,30 @@
               <div class="txn-header-title"><span>Transaction</span><strong id="driver-stop-number">Stop #1</strong></div>
               <span class="txn-header-spacer" aria-hidden="true"></span>
             </div>
-            <button class="txn-progress-icons" id="driver-progress" aria-label="Transaction progress, step 3 of 5, Driver">
-              <span class="txn-icon-steps" aria-hidden="true">
-                <span class="completed"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5h10v16H5V5h2"/><path d="M9 3h6v4H9zM8 13l2 2 5-5"/></svg></i><small>Services</small></span>
-                <span class="completed" id="driver-spot-step"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18M7 15h4"/></svg></i><small>Spot Pay</small></span>
-                <span class="active"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4.5l5 5L8 21H3v-5zM12 7l5 5"/></svg></i><small>Driver</small></span>
-                <span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4l5 5L8 21H3v-5zM13 6l5 5"/></svg></i><small>Customer</small></span>
-                <span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg></i><small>Review</small></span>
-              </span>
-            </button>
+            <nav class="txn-progress-icons" id="driver-progress" aria-label="Transaction progress, step 3 of 5, Driver">
+              <div class="txn-icon-steps">
+                <button type="button" class="completed" data-step-target="transaction-services">
+                  <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5h10v16H5V5h2"/><path d="M9 3h6v4H9zM8 13l2 2 5-5"/></svg></i>
+                  <small>Services</small>
+                </button>
+                <button type="button" class="completed" id="driver-spot-step" data-step-target="transaction-payment">
+                  <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18M7 15h4"/></svg></i>
+                  <small>Spot Pay</small>
+                </button>
+                <button type="button" class="active" data-step-target="transaction-driver" aria-current="step" disabled>
+                  <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4.5l5 5L8 21H3v-5zM12 7l5 5"/></svg></i>
+                  <small>Driver</small>
+                </button>
+                <button type="button" data-step-target="transaction-customer" disabled>
+                  <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4l5 5L8 21H3v-5zM13 6l5 5"/></svg></i>
+                  <small>Customer</small>
+                </button>
+                <button type="button" data-step-target="transaction-review" disabled>
+                  <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg></i>
+                  <small>Review</small>
+                </button>
+              </div>
+            </nav>
           </header>
 
           <div class="screen-body txn-body driver-body">
@@ -865,15 +926,30 @@
               <div class="txn-header-title"><span>Transaction</span><strong id="customer-stop-number">Stop #1</strong></div>
               <span class="txn-header-spacer" aria-hidden="true"></span>
             </div>
-            <button class="txn-progress-icons" id="customer-progress" aria-label="Transaction progress, step 4 of 5, Customer">
-              <span class="txn-icon-steps" aria-hidden="true">
-                <span class="completed"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5h10v16H5V5h2"/><path d="M9 3h6v4H9zM8 13l2 2 5-5"/></svg></i><small>Services</small></span>
-                <span class="completed" id="customer-spot-step"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18M7 15h4"/></svg></i><small>Spot Pay</small></span>
-                <span class="completed"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4.5l5 5L8 21H3v-5zM12 7l5 5"/></svg></i><small>Driver</small></span>
-                <span class="active"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4l5 5L8 21H3v-5zM13 6l5 5"/></svg></i><small>Customer</small></span>
-                <span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg></i><small>Review</small></span>
-              </span>
-            </button>
+            <nav class="txn-progress-icons" id="customer-progress" aria-label="Transaction progress, step 4 of 5, Customer">
+              <div class="txn-icon-steps">
+                <button type="button" class="completed" data-step-target="transaction-services">
+                  <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5h10v16H5V5h2"/><path d="M9 3h6v4H9zM8 13l2 2 5-5"/></svg></i>
+                  <small>Services</small>
+                </button>
+                <button type="button" class="completed" id="customer-spot-step" data-step-target="transaction-payment">
+                  <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18M7 15h4"/></svg></i>
+                  <small>Spot Pay</small>
+                </button>
+                <button type="button" class="completed" data-step-target="transaction-driver">
+                  <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4.5l5 5L8 21H3v-5zM12 7l5 5"/></svg></i>
+                  <small>Driver</small>
+                </button>
+                <button type="button" class="active" data-step-target="transaction-customer" aria-current="step" disabled>
+                  <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4l5 5L8 21H3v-5zM13 6l5 5"/></svg></i>
+                  <small>Customer</small>
+                </button>
+                <button type="button" data-step-target="transaction-review" disabled>
+                  <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg></i>
+                  <small>Review</small>
+                </button>
+              </div>
+            </nav>
           </header>
 
           <div class="screen-body txn-body customer-body">
@@ -1006,15 +1082,30 @@
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/><path d="M10 11v6M14 11v6"/></svg>
               </button>
             </div>
-            <button class="txn-progress-icons" id="review-progress" aria-label="Transaction progress, step 5 of 5, Review">
-              <span class="txn-icon-steps" aria-hidden="true">
-                <span class="completed"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5h10v16H5V5h2"/><path d="M9 3h6v4H9zM8 13l2 2 5-5"/></svg></i><small>Services</small></span>
-                <span class="completed" id="review-spot-step"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18M7 15h4"/></svg></i><small>Spot Pay</small></span>
-                <span class="completed"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4.5l5 5L8 21H3v-5zM12 7l5 5"/></svg></i><small>Driver</small></span>
-                <span class="completed"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4l5 5L8 21H3v-5zM13 6l5 5"/></svg></i><small>Customer</small></span>
-                <span class="active"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg></i><small>Review</small></span>
-              </span>
-            </button>
+            <nav class="txn-progress-icons" id="review-progress" aria-label="Transaction progress, step 5 of 5, Review">
+              <div class="txn-icon-steps">
+                <button type="button" class="completed" data-step-target="transaction-services">
+                  <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5h10v16H5V5h2"/><path d="M9 3h6v4H9zM8 13l2 2 5-5"/></svg></i>
+                  <small>Services</small>
+                </button>
+                <button type="button" class="completed" id="review-spot-step" data-step-target="transaction-payment">
+                  <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18M7 15h4"/></svg></i>
+                  <small>Spot Pay</small>
+                </button>
+                <button type="button" class="completed" data-step-target="transaction-driver">
+                  <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4.5l5 5L8 21H3v-5zM12 7l5 5"/></svg></i>
+                  <small>Driver</small>
+                </button>
+                <button type="button" class="completed" data-step-target="transaction-customer">
+                  <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4l5 5L8 21H3v-5zM13 6l5 5"/></svg></i>
+                  <small>Customer</small>
+                </button>
+                <button type="button" class="active" data-step-target="transaction-review" aria-current="step" disabled>
+                  <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg></i>
+                  <small>Review</small>
+                </button>
+              </div>
+            </nav>
           </header>
           <div class="screen-body txn-body review-body">
             <div class="txn-location-card" id="review-location-card"></div>
